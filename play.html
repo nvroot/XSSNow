@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="language" content="English">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Live DOM Viewer - Free Online HTML Renderer & DOM Tree Visualizer | XSSNow</title>
+    <meta name="description" content="Free Live DOM Viewer tool to render HTML in real-time. See instant browser preview, DOM tree visualization, and test XSS payloads safely. Perfect for web developers and security researchers.">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Live DOM Viewer - Free Online HTML Renderer | XSSNow">
+    <meta property="og:description" content="Free Live DOM Viewer to render HTML in real-time. Instant browser preview, DOM tree visualization, and XSS payload testing for security research.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xssnow.in/play.html">
+    <meta property="og:image" content="https://xssnow.in/assets/xss_now_logo.png">
+    <meta property="og:site_name" content="XSSNow">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Live DOM Viewer - Free Online HTML Renderer | XSSNow">
+    <meta name="twitter:description" content="Free Live DOM Viewer to render HTML in real-time. Instant browser preview and DOM tree visualization.">
+    <meta name="twitter:image" content="https://xssnow.in/assets/xss_now_logo.png">
+
+    <!-- Additional SEO Meta Tags -->
+    <meta name="keywords" content="Live DOM Viewer, DOM Viewer, HTML Renderer, Online HTML Viewer, DOM Tree Visualizer, HTML Preview, XSS Testing, DOM Inspector, HTML Parser, Real-time HTML, Browser Preview, Web Security Tools">
+    <meta name="author" content="Sid Joshi (dr34mhacks)">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://xssnow.in/play.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/ninja.svg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/mobile-enhancements.css">
+    <link rel="stylesheet" href="css/icon-fixes.css">
+    <link rel="stylesheet" href="css/play.css">
+</head>
+<body>
+    <!-- Matrix Background Animation -->
+    <div id="matrix-bg"></div>
+
+    <main id="main-content">
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--neon-green);">
+                    <i class="fas fa-user-ninja" style="color: var(--neon-green);"></i>
+                    <span class="brand-text" style="color: var(--neon-green);">XSSNow</span>
+                    <span class="version">v1.0</span>
+                </a>
+            </div>
+
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="payloads.html" class="nav-link">Payloads</a>
+                <a href="xss-payload-generator.html" class="nav-link">Generator</a>
+                <a href="contributors.html" class="nav-link">Contributors</a>
+                <a href="docs.html" class="nav-link">Docs</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="https://github.com/dr34mhacks/xssnow" class="github-btn" target="_blank">
+                    <i class="fab fa-github"></i>
+                    <span>Fork & Contribute</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="play-hero">
+        <div class="container">
+            <h1 class="hero-title">
+                <span class="gradient-text">Live DOM Viewer</span>
+            </h1>
+            <p class="hero-description">
+                Real-time HTML rendering with instant browser preview. Write code and watch it come to life.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Playground Section -->
+    <section class="playground-section">
+        <div class="container">
+
+            <!-- Editor and Browser Layout -->
+            <div class="editor-browser-layout">
+
+                <!-- Code Editor Panel -->
+                <div class="editor-panel">
+                    <div class="editor-header">
+                        <div class="editor-tabs">
+                            <div class="editor-tab active">
+                                <i class="fas fa-code"></i>
+                                <span>index.html</span>
+                            </div>
+                        </div>
+                        <div class="editor-actions">
+                            <button class="editor-btn" id="copyBtn" title="Copy Code">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button class="editor-btn" id="clearBtn" title="Clear">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="editor-body">
+                        <div class="line-numbers" id="lineNumbers">1</div>
+                        <textarea id="codeInput" class="code-textarea" spellcheck="false" placeholder="Type your HTML here...
+
+Example payloads to try:
+<h1>Hello World</h1>
+<p style='color: red;'>Styled text</p>
+<img src=x onerror=alert('XSS')>
+<button onclick=alert('Clicked!')>Click me</button>"></textarea>
+                    </div>
+                    <div class="editor-footer">
+                        <span class="status-indicator">
+                            <span class="status-dot live"></span>
+                            Auto-render enabled
+                        </span>
+                        <span class="char-count" id="charCount">0 chars</span>
+                    </div>
+                </div>
+
+                <!-- Safari Browser Window -->
+                <div class="browser-window">
+                    <div class="browser-chrome">
+                        <!-- Traffic Lights -->
+                        <div class="traffic-lights">
+                            <span class="traffic-light close"></span>
+                            <span class="traffic-light minimize"></span>
+                            <span class="traffic-light maximize"></span>
+                        </div>
+
+                        <!-- Browser Tabs -->
+                        <div class="browser-tabs">
+                            <div class="browser-tab active">
+                                <i class="fas fa-file-code"></i>
+                                <span>Preview</span>
+                            </div>
+                        </div>
+
+                        <!-- Window Actions -->
+                        <div class="window-actions">
+                            <button class="window-btn" id="refreshBtn" title="Refresh">
+                                <i class="fas fa-redo-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- URL Bar -->
+                    <div class="url-bar">
+                        <div class="url-buttons">
+                            <button class="url-btn" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="url-btn" disabled>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="url-input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <span class="url-text">xssnow.in/preview</span>
+                        </div>
+                        <div class="url-actions">
+                            <button class="url-btn">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Browser Content -->
+                    <div class="browser-content">
+                        <iframe id="previewFrame" title="Live Preview"></iframe>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- DOM Tree Panel -->
+            <div class="dom-panel">
+                <div class="dom-header">
+                    <div class="dom-title">
+                        <i class="fas fa-sitemap"></i>
+                        <span>DOM Tree</span>
+                    </div>
+                    <div class="dom-actions">
+                        <button class="dom-btn" id="expandAllBtn" title="Expand All">
+                            <i class="fas fa-expand-alt"></i>
+                        </button>
+                        <button class="dom-btn" id="collapseAllBtn" title="Collapse All">
+                            <i class="fas fa-compress-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="dom-body">
+                    <div id="domTree" class="dom-tree">
+                        <span class="dom-placeholder">DOM tree will appear as you type...</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>XSSNow</h3>
+                    <p style="color: var(--text-secondary) !important;">The most comprehensive XSS payload database for ethical security research and education.</p>
+                    <div class="github-star">
+                        <a href="https://github.com/dr34mhacks/xssnow" target="_blank" class="star-btn" style="color: var(--text-primary) !important; text-decoration: none !important;">
+                            <i class="fas fa-star"></i> Leave us a star
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="payloads.html">XSS Payloads</a></li>
+                        <li><a href="xss-payload-generator.html">Payload Generator</a></li>
+                        <li><a href="play.html">Live DOM Viewer</a></li>
+                        <li><a href="docs.html">Documentation</a></li>
+                        <li><a href="contributors.html">Contributors</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Docs</h4>
+                    <ul>
+                        <li><a href="docs.html#fundamentals">XSS Fundamentals</a></li>
+                        <li><a href="docs.html#bypass-techniques">Bypass Techniques</a></li>
+                        <li><a href="docs.html#waf-bypasses">WAF Bypasses</a></li>
+                        <li><a href="docs.html#prevention">Prevention Guide</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contribute</h4>
+                    <ul>
+                        <li><a href="https://github.com/dr34mhacks/xssnow" target="_blank">GitHub Repository</a></li>
+                        <li><a href="https://github.com/dr34mhacks/xssnow/issues" target="_blank">Report Issues</a></li>
+                        <li><a href="https://github.com/dr34mhacks/xssnow/blob/main/CONTRIBUTING.md" target="_blank">Add Payloads</a></li>
+                        <li><a href="contributors.html">Join Community</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-text">
+                    <p>&copy; 2026 XSSNow. Built with love by <a href="https://github.com/dr34mhacks/" target="_blank" style="color: var(--neon-green); text-decoration: none;">Sid Joshi (dr34mhacks)</a></p>
+                    <p class="disclaimer">For educational and ethical security testing only. Use responsibly.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/seo-framework.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/mobile-navigation.js"></script>
+    <script src="js/animations.js" defer></script>
+    <script src="js/domview.js" defer></script>
+
+    <!-- Mobile Menu Toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+
+            if (mobileToggle && navMenu) {
+                mobileToggle.addEventListener('click', function() {
+                    mobileToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+
+                navMenu.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', function() {
+                        mobileToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    });
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (!mobileToggle.contains(event.target) && !navMenu.contains(event.target)) {
+                        mobileToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js');
+            });
+        }
+    </script>
+</body>
+</html>
