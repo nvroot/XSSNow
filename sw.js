@@ -1,5 +1,5 @@
 // XSSNow Service Worker - PWA Functionality
-const CACHE_NAME = 'xssnow-v1.0.0';
+const CACHE_NAME = 'xssnow-v1.1.0';
 const STATIC_CACHE_URLS = [
     '/',
     '/index.html',

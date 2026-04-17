@@ -5,24 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Language" content="en">
     <meta name="language" content="English">
-    <title>🥷 XSSNow - XSS Payload Generator & WAF Bypass Tool</title>
-    <meta name="description" content="Advanced XSS payload generator for security researchers. Create context-aware payloads with WAF bypass techniques, encoding evasions, and custom length optimization.">
+    <title>XSS Payload Generator - Create WAF Bypass & Context-Aware Payloads | XSSNow</title>
+    <meta name="description" content="Free XSS payload generator with WAF bypass for Cloudflare, AWS WAF, Akamai, ModSecurity. Generate context-aware payloads for HTML, JavaScript, DOM, URL parameters. Perfect for penetration testing.">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="XSSNow - XSS Payload Generator">
-    <meta property="og:description" content="Advanced XSS payload generator with WAF bypass techniques and context-aware payload creation for security research.">
+    <meta property="og:title" content="XSS Payload Generator - WAF Bypass & Context-Aware | XSSNow">
+    <meta property="og:description" content="Free XSS payload generator with WAF bypass techniques for Cloudflare, AWS, Akamai. Context-aware payload creation for security research.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://xssnow.in/xss-payload-generator.html">
     <meta property="og:image" content="https://xssnow.in/assets/xss_now_logo.png">
+    <meta property="og:site_name" content="XSSNow">
 
     <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="XSSNow - XSS Payload Generator">
-    <meta name="twitter:description" content="Advanced XSS payload generator with WAF bypass techniques for security research.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="XSS Payload Generator - WAF Bypass Tool | XSSNow">
+    <meta name="twitter:description" content="Free XSS payload generator with WAF bypass for Cloudflare, AWS, Akamai, and more.">
+    <meta name="twitter:image" content="https://xssnow.in/assets/xss_now_logo.png">
 
     <!-- Additional SEO -->
-    <meta name="keywords" content="XSS Generator, Payload Generator, WAF Bypass, Context-aware XSS, Security Tools, Penetration Testing Tools">
+    <meta name="keywords" content="XSS Payload Generator, XSS Generator, WAF Bypass Generator, Cloudflare Bypass, AWS WAF Bypass, Akamai Bypass, ModSecurity Bypass, Context-aware XSS, HTML Context XSS, JavaScript Context XSS, DOM XSS Generator, URL Parameter XSS, XSS Encoding Bypass, Security Testing Tools, Penetration Testing, Bug Bounty Tools">
+    <meta name="author" content="Sid Joshi (dr34mhacks)">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://xssnow.in/xss-payload-generator.html">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "XSSNow Payload Generator",
+        "url": "https://xssnow.in/xss-payload-generator.html",
+        "description": "Free XSS payload generator with WAF bypass techniques for Cloudflare, AWS WAF, Akamai, ModSecurity, and F5 ASM.",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "Context-aware payload generation",
+            "WAF bypass for Cloudflare, AWS, Akamai",
+            "Character restriction handling",
+            "Multiple encoding techniques",
+            "Export payloads to file"
+        ]
+    }
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/ninja.svg">
@@ -53,19 +82,28 @@
                 <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--neon-green);">
                     <i class="fas fa-user-ninja" style="color: var(--neon-green);"></i>
                     <span class="brand-text" style="color: var(--neon-green);">XSSNow</span>
-                    <span class="version">v1.0</span>
+                    <span class="version">v1.1</span>
                 </a>
             </div>
 
             <div class="nav-menu">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="payloads.html" class="nav-link">Payloads</a>
-                <a href="xss-payload-generator.html" class="nav-link active">Generator</a>
+                <div class="nav-dropdown active">
+                    <button class="nav-dropdown-toggle">
+                        Tools <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="nav-dropdown-menu">
+                        <a href="xss-payload-generator.html" class="active"><i class="fas fa-magic"></i> Payload Generator</a>
+                        <a href="csp-evaluator.html"><i class="fas fa-shield-alt"></i> CSP Evaluator</a>
+                        <a href="play.html"><i class="fas fa-play-circle"></i> Live DOM Viewer</a>
+                    </div>
+                </div>
                 <a href="contributors.html" class="nav-link">Contributors</a>
                 <a href="docs.html" class="nav-link">Docs</a>
             </div>
 
-            <button class="mobile-menu-toggle">
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
                 <span></span>
                 <span></span>
                 <span></span>

@@ -8,6 +8,7 @@ class MobileNavigation {
         this.mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
         this.navMenu = document.querySelector('.nav-menu');
         this.navLinks = document.querySelectorAll('.nav-link');
+        this.navDropdowns = document.querySelectorAll('.nav-dropdown');
         this.isMenuOpen = false;
 
         this.init();
@@ -16,6 +17,7 @@ class MobileNavigation {
     init() {
         this.setupMobileMenuToggle();
         this.setupNavLinkClicks();
+        this.setupDropdownToggle();
         this.setupOutsideClick();
         this.handleResize();
 
@@ -47,6 +49,53 @@ class MobileNavigation {
                 // Close mobile menu when a link is clicked
                 if (this.isMenuOpen) {
                     this.closeMobileMenu();
+                }
+            });
+        });
+    }
+
+    setupDropdownToggle() {
+        // Handle dropdown toggle for both mobile and desktop (for touch devices)
+        this.navDropdowns.forEach(dropdown => {
+            const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+            const menu = dropdown.querySelector('.nav-dropdown-menu');
+
+            if (toggle) {
+                toggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Close other dropdowns first
+                    this.navDropdowns.forEach(d => {
+                        if (d !== dropdown) {
+                            d.classList.remove('open');
+                        }
+                    });
+
+                    // Toggle this dropdown
+                    dropdown.classList.toggle('open');
+                });
+            }
+
+            // Close mobile menu when clicking a dropdown link
+            if (menu) {
+                const dropdownLinks = menu.querySelectorAll('a');
+                dropdownLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        dropdown.classList.remove('open');
+                        if (this.isMenuOpen) {
+                            this.closeMobileMenu();
+                        }
+                    });
+                });
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            this.navDropdowns.forEach(dropdown => {
+                if (!dropdown.contains(e.target)) {
+                    dropdown.classList.remove('open');
                 }
             });
         });
@@ -86,6 +135,11 @@ class MobileNavigation {
         this.isMenuOpen = false;
         this.mobileMenuToggle.classList.remove('active');
         this.navMenu.classList.remove('active');
+
+        // Close any open dropdowns
+        this.navDropdowns.forEach(dropdown => {
+            dropdown.classList.remove('open');
+        });
     }
 
     handleResize() {

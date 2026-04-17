@@ -3,24 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🥷 XSSNow - Complete XSS Security Documentation & Learning Guide</title>
-    <meta name="description" content="Comprehensive guide to Cross-Site Scripting (XSS) vulnerabilities, WAF bypass techniques, prevention methods, and security research. Learn XSS from basics to advanced exploitation.">
+    <title>XSS Tutorial & Documentation - Learn Cross-Site Scripting & CSP Bypass | XSSNow</title>
+    <meta name="description" content="Complete XSS tutorial covering Reflected, Stored, DOM-based XSS, CSP bypass techniques, WAF evasion, and prevention methods. Learn XSS exploitation from basics to advanced for bug bounty and security research.">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="XSSNow - XSS Security Documentation">
-    <meta property="og:description" content="Comprehensive guide to Cross-Site Scripting vulnerabilities, bypass techniques, and prevention methods for security researchers.">
-    <meta property="og:type" content="website">
+    <meta property="og:title" content="XSS Tutorial - Learn Cross-Site Scripting & CSP Bypass | XSSNow">
+    <meta property="og:description" content="Complete XSS tutorial with CSP bypass techniques, WAF evasion, and prevention methods. From basics to advanced exploitation.">
+    <meta property="og:type" content="article">
     <meta property="og:url" content="https://xssnow.in/docs.html">
     <meta property="og:image" content="https://xssnow.in/assets/xss_now_logo.png">
+    <meta property="og:site_name" content="XSSNow">
 
     <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="XSSNow - XSS Security Documentation">
-    <meta name="twitter:description" content="Learn XSS from basics to advanced exploitation with comprehensive documentation.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="XSS Tutorial - Complete Guide | XSSNow">
+    <meta name="twitter:description" content="Learn XSS from basics to advanced with CSP bypass and WAF evasion techniques.">
+    <meta name="twitter:image" content="https://xssnow.in/assets/xss_now_logo.png">
 
     <!-- Additional SEO -->
-    <meta name="keywords" content="XSS Documentation, Cross-Site Scripting Guide, XSS Learning, Security Education, Web Security, XSS Prevention">
+    <meta name="keywords" content="XSS Tutorial, XSS Documentation, Cross-Site Scripting Guide, XSS Learning, How to XSS, Reflected XSS Tutorial, Stored XSS Tutorial, DOM XSS Tutorial, CSP Bypass Tutorial, WAF Bypass Guide, XSS Prevention, Web Security Education, XSS Bug Bounty Guide, OWASP XSS, XSS for Beginners, Advanced XSS Techniques">
+    <meta name="author" content="Sid Joshi (dr34mhacks)">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://xssnow.in/docs.html">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Complete XSS Tutorial - Cross-Site Scripting Guide",
+        "description": "Comprehensive guide to Cross-Site Scripting vulnerabilities, CSP bypass techniques, WAF evasion, and prevention methods.",
+        "url": "https://xssnow.in/docs.html",
+        "author": {
+            "@type": "Person",
+            "name": "Sid Joshi"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "XSSNow"
+        },
+        "articleSection": ["XSS Fundamentals", "Bypass Techniques", "WAF Evasion", "Prevention"],
+        "keywords": "XSS, Cross-Site Scripting, CSP Bypass, WAF Bypass, Security"
+    }
+    </script>
+    <!-- FAQ Schema for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is Cross-Site Scripting (XSS)?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Cross-Site Scripting (XSS) is a web security vulnerability that allows attackers to inject malicious scripts into web pages viewed by other users. These scripts can steal session cookies, redirect users, modify page content, or perform actions on behalf of victims."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What are the types of XSS attacks?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "There are three main types of XSS: Reflected XSS (non-persistent, delivered via URLs), Stored XSS (persistent, stored in databases), and DOM-based XSS (client-side, manipulates the DOM directly). Each type has different attack vectors and impact levels."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I bypass Content Security Policy (CSP)?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "CSP can be bypassed through JSONP endpoints on whitelisted domains, AngularJS template injection when CDNs are allowed, script gadgets in whitelisted libraries, base tag injection when base-uri is missing, and exploiting unsafe-inline or unsafe-eval directives."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How can I prevent XSS vulnerabilities?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Prevent XSS by implementing input validation and sanitization, using context-aware output encoding, deploying Content Security Policy headers, using HTTPOnly and Secure cookie flags, and employing security libraries like DOMPurify for HTML sanitization."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is a WAF bypass for XSS?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "WAF bypass techniques involve encoding payloads (URL, HTML, Unicode), using alternative syntax (backticks instead of parentheses), case manipulation, null bytes, nested tags, and protocol-specific vectors to evade Web Application Firewall detection rules."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What are JSONP endpoints used for CSP bypass?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "JSONP endpoints on domains like google.com, twitter.com, and various CDNs can bypass CSP because the callback parameter allows arbitrary JavaScript execution. If these domains are in your script-src, attackers can use them to execute malicious code."
+                }
+            }
+        ]
+    }
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/ninja.svg">
@@ -57,19 +139,28 @@
                 <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--neon-green);">
                     <i class="fas fa-user-ninja" style="color: var(--neon-green);"></i>
                     <span class="brand-text" style="color: var(--neon-green);">XSSNow</span>
-                    <span class="version">v1.0</span>
+                    <span class="version">v1.1</span>
                 </a>
             </div>
 
             <div class="nav-menu">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="payloads.html" class="nav-link">Payloads</a>
-                <a href="xss-payload-generator.html" class="nav-link">Generator</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-toggle">
+                        Tools <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="nav-dropdown-menu">
+                        <a href="xss-payload-generator.html"><i class="fas fa-magic"></i> Payload Generator</a>
+                        <a href="csp-evaluator.html"><i class="fas fa-shield-alt"></i> CSP Evaluator</a>
+                        <a href="play.html"><i class="fas fa-play-circle"></i> Live DOM Viewer</a>
+                    </div>
+                </div>
                 <a href="contributors.html" class="nav-link">Contributors</a>
                 <a href="docs.html" class="nav-link active">Docs</a>
             </div>
 
-            <button class="mobile-menu-toggle">
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
                 <span></span>
                 <span></span>
                 <span></span>

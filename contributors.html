@@ -8,23 +8,27 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>🥷 XSSNow - Community Contributors & Security Researchers</title>
-    <meta name="description" content="Meet the elite security researchers, ethical hackers, and contributors who make XSSNow the ultimate community-driven XSS payload database.">
+    <title>XSSNow Contributors - Security Researchers & Bug Bounty Community</title>
+    <meta name="description" content="Meet the security researchers, ethical hackers, and bug bounty hunters who contribute XSS payloads and CSP bypasses to the XSSNow community. Join our open-source security project.">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="XSSNow - Security Researchers Community">
-    <meta property="og:description" content="Meet the elite security researchers and ethical hackers contributing to the ultimate XSS payload database.">
+    <meta property="og:title" content="XSSNow Contributors - Security Research Community">
+    <meta property="og:description" content="Meet the security researchers and bug bounty hunters contributing XSS payloads and CSP bypasses to XSSNow.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://xssnow.in/contributors.html">
     <meta property="og:image" content="https://xssnow.in/assets/xss_now_logo.png">
+    <meta property="og:site_name" content="XSSNow">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="XSSNow - Security Researchers Community">
-    <meta name="twitter:description" content="Meet the security researchers contributing to XSSNow's XSS payload database.">
+    <meta name="twitter:title" content="XSSNow Contributors | Security Research Community">
+    <meta name="twitter:description" content="Meet the security researchers contributing XSS payloads and CSP bypasses.">
+    <meta name="twitter:image" content="https://xssnow.in/assets/xss_now_logo.png">
 
     <!-- Additional SEO -->
-    <meta name="keywords" content="Security Researchers, Contributors, XSS Experts, Ethical Hackers, Bug Bounty Hunters, Cybersecurity Community">
+    <meta name="keywords" content="Security Researchers, XSS Contributors, Bug Bounty Hunters, Ethical Hackers, Cybersecurity Community, Open Source Security, XSS Experts, Penetration Testers, Security Researchers Community">
+    <meta name="author" content="Sid Joshi (dr34mhacks)">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://xssnow.in/contributors.html">
 
     <!-- Favicon -->
@@ -57,19 +61,28 @@
                 <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--neon-green);">
                     <i class="fas fa-user-ninja" style="color: var(--neon-green);"></i>
                     <span class="brand-text" style="color: var(--neon-green);">XSSNow</span>
-                    <span class="version">v1.0</span>
+                    <span class="version">v1.1</span>
                 </a>
             </div>
 
             <div class="nav-menu">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="payloads.html" class="nav-link">Payloads</a>
-                <a href="xss-payload-generator.html" class="nav-link">Generator</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-toggle">
+                        Tools <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="nav-dropdown-menu">
+                        <a href="xss-payload-generator.html"><i class="fas fa-magic"></i> Payload Generator</a>
+                        <a href="csp-evaluator.html"><i class="fas fa-shield-alt"></i> CSP Evaluator</a>
+                        <a href="play.html"><i class="fas fa-play-circle"></i> Live DOM Viewer</a>
+                    </div>
+                </div>
                 <a href="contributors.html" class="nav-link active">Contributors</a>
                 <a href="docs.html" class="nav-link">Docs</a>
             </div>
 
-            <button class="mobile-menu-toggle">
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
                 <span></span>
                 <span></span>
                 <span></span>

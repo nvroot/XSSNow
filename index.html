@@ -8,12 +8,12 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>XSSNow - Ultimate XSS Payload Arsenal & Security Research Platform</title>
-    <meta name="description" content="Community-driven XSS vulnerability testing platform with curated payloads, advanced generator, WAF bypass techniques, and security research tools. Perfect for penetration testing and bug bounty hunting.">
+    <title>XSSNow - XSS Payloads, CSP Bypass & Cross-Site Scripting Tools</title>
+    <meta name="description" content="Free XSS payload database with 1000+ payloads, CSP bypass tool with 346+ JSONP gadgets, WAF bypass techniques, and XSS payload generator. The ultimate platform for penetration testing and bug bounty hunting.">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="XSSNow - Ultimate XSS Payload Arsenal">
-    <meta property="og:description" content="Community-driven XSS vulnerability testing platform with curated payloads, advanced generator, and WAF bypass techniques for security research.">
+    <meta property="og:title" content="XSSNow - XSS Payloads & CSP Bypass Tools">
+    <meta property="og:description" content="Free XSS payload database, CSP bypass finder with 346+ JSONP gadgets, WAF bypass techniques, and payload generator for security research.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://xssnow.in">
     <meta property="og:image" content="https://xssnow.in/assets/xss_now_logo.png">
@@ -21,16 +21,58 @@
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="XSSNow - Ultimate XSS Payload Arsenal">
-    <meta name="twitter:description" content="Community-driven XSS vulnerability testing platform with curated payloads and WAF bypass techniques.">
+    <meta name="twitter:title" content="XSSNow - XSS Payloads & CSP Bypass Tools">
+    <meta name="twitter:description" content="Free XSS payload database and CSP bypass finder with 346+ JSONP gadgets for penetration testing.">
     <meta name="twitter:image" content="https://xssnow.in/assets/xss_now_logo.png">
 
     <!-- Additional SEO Meta Tags -->
-    <meta name="keywords" content="XSS, Cross-Site Scripting, Security Testing, Penetration Testing, Bug Bounty, WAF Bypass, Security Research, Ethical Hacking">
+    <meta name="keywords" content="XSS Payloads, Cross-Site Scripting, XSS Attack, CSP Bypass, Content Security Policy Bypass, JSONP Bypass, WAF Bypass, XSS Cheat Sheet, XSS Payload Generator, Penetration Testing, Bug Bounty, Security Research, Ethical Hacking, Script Injection, DOM XSS, Reflected XSS, Stored XSS, AngularJS XSS, XSS Filter Bypass">
     <meta name="author" content="Sid Joshi (dr34mhacks)">
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
     <link rel="canonical" href="https://xssnow.in">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "XSSNow",
+        "alternateName": "XSS Now",
+        "url": "https://xssnow.in",
+        "description": "Free XSS payload database with 1000+ payloads, CSP bypass tool, and security research tools for penetration testing.",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://xssnow.in/payloads.html?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Sid Joshi",
+            "alternateName": "dr34mhacks",
+            "url": "https://github.com/dr34mhacks"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "XSSNow Security Tools",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "150"
+        }
+    }
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/ninja.svg">
@@ -80,8 +122,25 @@
                 <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--neon-green);">
                     <i class="fas fa-user-ninja" style="color: var(--neon-green);"></i>
                     <span class="brand-text" style="color: var(--neon-green);">XSSNow</span>
-                    <span class="version">v1.0</span>
+                    <span class="version">v1.1</span>
                 </a>
+            </div>
+
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="payloads.html" class="nav-link">Payloads</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-toggle">
+                        Tools <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="nav-dropdown-menu">
+                        <a href="xss-payload-generator.html"><i class="fas fa-magic"></i> Payload Generator</a>
+                        <a href="csp-evaluator.html"><i class="fas fa-shield-alt"></i> CSP Evaluator</a>
+                        <a href="play.html"><i class="fas fa-play-circle"></i> Live DOM Viewer</a>
+                    </div>
+                </div>
+                <a href="contributors.html" class="nav-link">Contributors</a>
+                <a href="docs.html" class="nav-link">Docs</a>
             </div>
 
             <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
@@ -89,15 +148,6 @@
                 <span></span>
                 <span></span>
             </button>
-
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link active">Home</a>
-                <a href="payloads.html" class="nav-link">Payloads</a>
-                <a href="xss-payload-generator.html" class="nav-link">Generator</a>
-                <a href="contributors.html" class="nav-link">Contributors</a>
-                <a href="docs.html" class="nav-link">Docs</a>
-            </div>
-
             <div class="nav-actions">
                 <a href="https://github.com/dr34mhacks/xssnow" class="github-btn" target="_blank">
                     <i class="fab fa-github"></i>

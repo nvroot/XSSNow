@@ -105,6 +105,15 @@ Do NOT use these payloads on systems you do not own or have explicit permission 
 
 ---
 
+## 🙏 **Credits & Acknowledgments**
+
+The CSP Bypass tool includes payload vectors from these amazing projects:
+
+- **[CSPBypass](https://github.com/renniepak/CSPBypass)** by [@renniepak](https://github.com/renniepak) - Comprehensive CSP bypass payload collection
+- **[JSONBee](https://github.com/zigoo0/JSONBee)** by [@zigoo0](https://github.com/zigoo0) - JSONP endpoints for CSP bypass
+
+---
+
 ## 📄 **License**
 
 Licensed under the MIT License - empowering open security research while maintaining responsible usage standards.

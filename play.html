@@ -26,10 +26,36 @@
     <meta name="twitter:image" content="https://xssnow.in/assets/xss_now_logo.png">
 
     <!-- Additional SEO Meta Tags -->
-    <meta name="keywords" content="Live DOM Viewer, DOM Viewer, HTML Renderer, Online HTML Viewer, DOM Tree Visualizer, HTML Preview, XSS Testing, DOM Inspector, HTML Parser, Real-time HTML, Browser Preview, Web Security Tools">
+    <meta name="keywords" content="Live DOM Viewer, DOM Viewer, HTML Renderer, Online HTML Viewer, DOM Tree Visualizer, HTML Preview, XSS Testing Tool, XSS Payload Testing, DOM Inspector, HTML Parser, Real-time HTML, Browser Preview, Web Security Tools, JavaScript Sandbox, XSS Playground, Security Research Tools">
     <meta name="author" content="Sid Joshi (dr34mhacks)">
     <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
     <link rel="canonical" href="https://xssnow.in/play.html">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "XSSNow Live DOM Viewer",
+        "url": "https://xssnow.in/play.html",
+        "description": "Free Live DOM Viewer to render HTML in real-time. Test XSS payloads safely with instant browser preview and DOM tree visualization.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "Real-time HTML rendering",
+            "DOM tree visualization",
+            "Safe XSS payload testing",
+            "Sandboxed execution environment",
+            "Instant browser preview"
+        ]
+    }
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/ninja.svg">
@@ -63,8 +89,25 @@
                 <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--neon-green);">
                     <i class="fas fa-user-ninja" style="color: var(--neon-green);"></i>
                     <span class="brand-text" style="color: var(--neon-green);">XSSNow</span>
-                    <span class="version">v1.0</span>
+                    <span class="version">v1.1</span>
                 </a>
+            </div>
+
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="payloads.html" class="nav-link">Payloads</a>
+                <div class="nav-dropdown active">
+                    <button class="nav-dropdown-toggle">
+                        Tools <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="nav-dropdown-menu">
+                        <a href="xss-payload-generator.html"><i class="fas fa-magic"></i> Payload Generator</a>
+                        <a href="csp-evaluator.html"><i class="fas fa-shield-alt"></i> CSP Evaluator</a>
+                        <a href="play.html" class="active"><i class="fas fa-play-circle"></i> Live DOM Viewer</a>
+                    </div>
+                </div>
+                <a href="contributors.html" class="nav-link">Contributors</a>
+                <a href="docs.html" class="nav-link">Docs</a>
             </div>
 
             <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
@@ -72,15 +115,6 @@
                 <span></span>
                 <span></span>
             </button>
-
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="payloads.html" class="nav-link">Payloads</a>
-                <a href="xss-payload-generator.html" class="nav-link">Generator</a>
-                <a href="contributors.html" class="nav-link">Contributors</a>
-                <a href="docs.html" class="nav-link">Docs</a>
-            </div>
-
             <div class="nav-actions">
                 <a href="https://github.com/dr34mhacks/xssnow" class="github-btn" target="_blank">
                     <i class="fab fa-github"></i>

